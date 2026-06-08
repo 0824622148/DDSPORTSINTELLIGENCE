@@ -1,29 +1,698 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>DD Sports Management — Intelligence Platform</title>
-  <link rel="icon" type="image/png" href="assets/mark-navy.png" />
-  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/react@18.3.1/umd/react.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.production.min.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js"></script>
+  <script src="https://unpkg.com/recharts@2.12.7/umd/Recharts.js"></script>
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --bg: #050c1a;
+      --surface: #0a1628;
+      --card: #0f1e36;
+      --card-h: #142440;
+      --border: #1a2d48;
+      --border2: #243552;
+      --blue: #3b82f6;
+      --blue-g: rgba(59,130,246,0.14);
+      --green: #10b981;
+      --green-g: rgba(16,185,129,0.14);
+      --amber: #f59e0b;
+      --red: #ef4444;
+      --purple: #8b5cf6;
+      --text: #ddeaff;
+      --text2: #6b84a8;
+      --text3: #334a66;
+      --r: 12px;
+      --r-sm: 8px;
+      --nav: 62px;
+      --hdr: 58px;
+    }
+    html, body, #root { height: 100%; }
+    body {
+      background: var(--bg);
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, sans-serif;
+      font-size: 14px;
+      overflow: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    ::-webkit-scrollbar { width: 3px; }
+    ::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+    .app { display: flex; flex-direction: column; height: 100vh; }
+    .hdr {
+      height: var(--hdr); background: var(--surface);
+      border-bottom: 1px solid var(--border);
+      display: flex; align-items: center; padding: 0 16px; gap: 10px;
+      flex-shrink: 0; z-index: 10;
+    }
+    .logo-mark {
+      width: 34px; height: 34px; border-radius: 8px;
+      background: linear-gradient(135deg, #3b82f6 0%, #6366f1 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 13px; font-weight: 900; color: #fff; letter-spacing: -0.5px;
+      flex-shrink: 0;
+    }
+    .logo-name { font-size: 14px; font-weight: 800; letter-spacing: -0.3px; color: var(--text); }
+    .logo-sub { font-size: 9px; color: var(--text2); text-transform: uppercase; letter-spacing: 1px; }
+    .hdr-right { margin-left: auto; display: flex; align-items: center; gap: 10px; }
+    .icon-btn {
+      width: 34px; height: 34px; border-radius: 50%;
+      background: var(--card); border: 1px solid var(--border);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--text2); cursor: pointer; position: relative;
+    }
+    .icon-btn::after {
+      content: ''; position: absolute; top: 1px; right: 1px;
+      width: 8px; height: 8px; background: var(--red);
+      border: 2px solid var(--surface); border-radius: 50%;
+    }
+    .hdr-avatar {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--blue), var(--purple));
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 800; color: #fff;
+    }
+    .content { flex: 1; overflow-y: auto; overflow-x: hidden; padding-bottom: calc(var(--nav) + 8px); }
+    .screen { padding: 14px 14px 4px; max-width: 520px; margin: 0 auto; }
+
+    .nav {
+      position: fixed; bottom: 0; left: 0; right: 0;
+      height: var(--nav); background: var(--surface);
+      border-top: 1px solid var(--border);
+      display: flex; z-index: 10;
+    }
+    .nav-btn {
+      flex: 1; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 3px; cursor: pointer; border: none; background: none;
+      color: var(--text3); font-size: 10px; font-weight: 500;
+      transition: color 0.15s; padding: 0;
+    }
+    .nav-btn.on { color: var(--blue); }
+    .nav-btn svg { width: 21px; height: 21px; }
+
+    .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .kpi { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; }
+    .kpi-ico { width: 30px; height: 30px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+    .kpi-val { font-size: 22px; font-weight: 800; letter-spacing: -0.5px; line-height: 1; }
+    .kpi-lbl { font-size: 11px; color: var(--text2); margin-top: 3px; }
+    .kpi-trend { font-size: 10px; font-weight: 600; margin-top: 6px; }
+    .up { color: var(--green); }
+    .warn { color: var(--amber); }
+
+    .sec-hdr { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; }
+    .sec-title { font-size: 15px; font-weight: 700; }
+    .sec-link { font-size: 12px; color: var(--blue); cursor: pointer; }
+
+    .chart-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; margin-bottom: 14px; }
+    .chart-title { font-size: 11px; font-weight: 600; color: var(--text2); margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.5px; }
+
+    .ath-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 14px; }
+    .ath-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 13px; cursor: pointer; transition: background 0.12s, border-color 0.12s; }
+    .ath-card:hover { background: var(--card-h); border-color: var(--border2); }
+    .ath-ava { width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; color: #fff; margin-bottom: 9px; }
+    .ath-name { font-size: 13px; font-weight: 700; margin-bottom: 2px; line-height: 1.2; }
+    .ath-sub { font-size: 11px; color: var(--text2); line-height: 1.3; }
+    .ath-stat { font-size: 12px; margin-top: 7px; font-weight: 700; }
+
+    .bdg { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; border-radius: 20px; font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.6px; }
+    .bdg-dot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+    .bdg.active { background: rgba(16,185,129,0.15); color: var(--green); }
+    .bdg.inactive { background: rgba(100,116,139,0.12); color: #64748b; }
+    .bdg.negotiating { background: rgba(245,158,11,0.15); color: var(--amber); }
+
+    .search { display: flex; align-items: center; gap: 9px; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 10px 13px; margin-bottom: 12px; }
+    .search input { flex: 1; background: none; border: none; outline: none; color: var(--text); font-size: 14px; }
+    .search input::placeholder { color: var(--text3); }
+    .chips { display: flex; gap: 7px; overflow-x: auto; margin-bottom: 14px; padding-bottom: 2px; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip { padding: 5px 13px; border-radius: 20px; border: 1px solid var(--border); background: var(--card); color: var(--text2); font-size: 12px; font-weight: 500; cursor: pointer; white-space: nowrap; flex-shrink: 0; }
+    .chip.on { background: var(--blue-g); border-color: var(--blue); color: var(--blue); }
+
+    .pg-hdr { margin-bottom: 14px; }
+    .pg-title { font-size: 20px; font-weight: 800; letter-spacing: -0.3px; }
+    .pg-sub { font-size: 12px; color: var(--text2); margin-top: 2px; }
+
+    .overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); display: flex; align-items: flex-end; z-index: 50; animation: fadeIn 0.15s ease; }
+    @keyframes fadeIn { from { opacity:0; } to { opacity:1; } }
+    .modal { width: 100%; background: var(--surface); border-radius: 20px 20px 0 0; padding: 20px 18px 36px; max-height: 82vh; overflow-y: auto; animation: slideUp 0.2s ease; }
+    @keyframes slideUp { from { transform: translateY(40px); opacity:0; } to { transform: translateY(0); opacity:1; } }
+    .modal-handle { width: 36px; height: 4px; background: var(--border2); border-radius: 2px; margin: 0 auto 18px; }
+    .modal-hdr { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 18px; }
+    .modal-stat-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 14px; }
+    .m-stat { background: var(--card); border-radius: var(--r-sm); padding: 10px 8px; text-align: center; }
+    .m-stat .v { font-size: 16px; font-weight: 800; line-height: 1; }
+    .m-stat .l { font-size: 9px; color: var(--text2); margin-top: 3px; text-transform: uppercase; letter-spacing: 0.4px; }
+    .m-row { display: flex; gap: 10px; }
+    .m-pill { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: var(--r-sm); padding: 12px; }
+    .m-pill .pl { font-size: 10px; color: var(--text2); }
+    .m-pill .pv { font-size: 18px; font-weight: 800; margin-top: 3px; }
+
+    .team-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 14px 16px; margin-bottom: 10px; display: flex; align-items: center; gap: 14px; }
+    .team-logo { width: 46px; height: 46px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 900; letter-spacing: -0.5px; flex-shrink: 0; }
+    .team-name { font-size: 14px; font-weight: 700; }
+    .team-sport { font-size: 11px; color: var(--text2); margin-top: 1px; }
+    .team-rec { font-size: 11px; color: var(--text2); margin-top: 5px; font-family: monospace; }
+    .team-right { margin-left: auto; text-align: right; flex-shrink: 0; }
+    .team-n { font-size: 24px; font-weight: 900; color: var(--blue); line-height: 1; }
+    .team-nl { font-size: 9px; color: var(--text2); text-transform: uppercase; letter-spacing: 0.5px; margin-top: 2px; }
+
+    .act-item { display: flex; align-items: flex-start; gap: 11px; padding: 10px 0; border-bottom: 1px solid var(--border); }
+    .act-item:last-child { border-bottom: none; }
+    .act-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; margin-top: 4px; }
+    .act-txt { flex: 1; font-size: 12px; line-height: 1.45; }
+    .act-t { font-size: 10px; color: var(--text2); white-space: nowrap; }
+
+    .insight { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; display: flex; align-items: center; gap: 12px; margin-bottom: 10px; }
+    .ins-ico { width: 40px; height: 40px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .ins-lbl { font-size: 11px; color: var(--text2); }
+    .ins-val { font-size: 16px; font-weight: 700; margin-top: 2px; }
+
+    .prof-card { background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 18px; display: flex; align-items: center; gap: 14px; margin-bottom: 18px; }
+    .prof-ava { width: 54px; height: 54px; border-radius: 50%; background: linear-gradient(135deg, var(--blue), var(--purple)); display: flex; align-items: center; justify-content: center; font-size: 18px; font-weight: 900; color: #fff; }
+    .prof-name { font-size: 15px; font-weight: 700; }
+    .prof-role { font-size: 11px; color: var(--text2); margin-top: 2px; }
+    .menu-grp { margin-bottom: 18px; }
+    .menu-lbl { font-size: 9px; color: var(--text3); text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .menu-item { display: flex; align-items: center; gap: 12px; padding: 13px 14px; background: var(--card); border: 1px solid var(--border); border-top-width: 0; cursor: pointer; }
+    .menu-item:first-child { border-top-width: 1px; border-radius: var(--r) var(--r) 0 0; }
+    .menu-item:last-child { border-radius: 0 0 var(--r) var(--r); }
+    .menu-item:only-child { border-radius: var(--r); }
+    .m-ico { width: 30px; height: 30px; border-radius: var(--r-sm); display: flex; align-items: center; justify-content: center; }
+    .m-lbl { font-size: 14px; font-weight: 500; }
+    .m-chev { margin-left: auto; color: var(--text3); }
+
+    .stat-pair { display: flex; gap: 10px; margin-bottom: 14px; }
+    .stat-box { flex: 1; background: var(--card); border: 1px solid var(--border); border-radius: var(--r); padding: 14px; }
+    .stat-box .sv { font-size: 26px; font-weight: 900; letter-spacing: -1px; }
+    .stat-box .sl { font-size: 11px; color: var(--text2); margin-top: 2px; }
+    .stat-box .sd { font-size: 11px; font-weight: 600; margin-top: 5px; }
+
+    .tt { background: #1a2540; border: 1px solid #243552; border-radius: 8px; padding: 8px 12px; }
+    .tt-label { font-size: 10px; color: var(--text2); margin-bottom: 4px; }
+    .tt-row { font-size: 12px; font-weight: 700; }
+
+    .empty { text-align: center; padding: 48px 20px; color: var(--text2); }
+    .empty-ico { font-size: 36px; margin-bottom: 12px; }
+  </style>
 </head>
 <body>
-  <div id="root"></div>
+<div id="root"></div>
+<script type="text/babel">
+const { useState, useMemo } = React;
+const {
+  AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell,
+  XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer
+} = Recharts;
 
-  <!-- React + Babel -->
-  <script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
-  <script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+/* ── DATA ─────────────────────────────────────────────────────────────── */
+const ATHLETES = [
+  { id:1,  name:"Thabo Nkosi",     init:"TN", sport:"Football",  team:"Mamelodi Sundowns", pos:"Forward",     age:24, status:"active",      cv:1200000, exp:"Jun 2026", stat:"18 Goals",       clr:"#fbbf24", stats:{Goals:18,Assists:7,Matches:28,Rating:8.4} },
+  { id:2,  name:"Sipho Dlamini",   init:"SD", sport:"Football",  team:"Orlando Pirates",   pos:"Midfielder",  age:27, status:"active",      cv:950000,  exp:"Dec 2025", stat:"14 Assists",     clr:"#60a5fa", stats:{Goals:6,Assists:14,Matches:30,Rating:7.9} },
+  { id:3,  name:"Lebo Mokoena",    init:"LM", sport:"Rugby",     team:"Lions",             pos:"Flyhalf",     age:26, status:"active",      cv:1800000, exp:"May 2027", stat:"234 Points",     clr:"#34d399", stats:{Points:234,Tackles:45,Matches:22,Rating:8.7} },
+  { id:4,  name:"Kagiso Sithole",  init:"KS", sport:"Cricket",   team:"Titans",            pos:"Fast Bowler", age:25, status:"active",      cv:2100000, exp:"Oct 2026", stat:"38 Wickets",     clr:"#f87171", stats:{Wickets:38,Average:"22.4",Matches:18,Rating:9.1} },
+  { id:5,  name:"Nomvula Dube",    init:"ND", sport:"Athletics", team:"Individual",        pos:"Sprinter",    age:22, status:"active",      cv:680000,  exp:"Aug 2025", stat:"11.2s PB",       clr:"#a78bfa", stats:{"100m":"11.2s","200m":"22.8s",Events:12,Rating:8.2} },
+  { id:6,  name:"Andile Khumalo",  init:"AK", sport:"Football",  team:"Kaizer Chiefs",     pos:"Defender",    age:29, status:"negotiating", cv:850000,  exp:"Jun 2025", stat:"25 Matches",     clr:"#fbbf24", stats:{Goals:2,Assists:3,Matches:25,Rating:7.5} },
+  { id:7,  name:"Bongani Cele",    init:"BC", sport:"Rugby",     team:"Sharks",            pos:"Wing",        age:23, status:"active",      cv:1400000, exp:"Sep 2026", stat:"12 Tries",       clr:"#0ea5e9", stats:{Tries:12,Tackles:67,Matches:20,Rating:8.6} },
+  { id:8,  name:"Siyanda Mthembu", init:"SM", sport:"Football",  team:"Cape Town City",    pos:"Goalkeeper",  age:31, status:"inactive",    cv:780000,  exp:"Apr 2025", stat:"9 Clean Sheets", clr:"#64748b", stats:{"Clean Sheets":9,Saves:87,Matches:24,Rating:7.8} },
+  { id:9,  name:"Refilwe Moagi",   init:"RM", sport:"Athletics", team:"Individual",        pos:"Marathon",    age:28, status:"active",      cv:920000,  exp:"Mar 2026", stat:"2:14:33 PB",     clr:"#fb923c", stats:{PB:"2:14:33",Events:8,Podiums:5,Rating:8.9} },
+  { id:10, name:"Thandeka Zulu",   init:"TZ", sport:"Cricket",   team:"Proteas Women",     pos:"Batsman",     age:24, status:"active",      cv:1100000, exp:"Jan 2027", stat:"1,247 Runs",     clr:"#22d3ee", stats:{Runs:1247,Average:"42.3",Matches:31,Rating:8.5} },
+];
 
-  <!-- Data (plain JS) -->
-  <script src="data.js"></script>
+const TEAMS = [
+  { id:1, name:"Mamelodi Sundowns", abbr:"MSU", sport:"Football",  n:2, rec:"18W · 5D · 3L", status:"Champions",  clr:"#fbbf24", bg:"rgba(251,191,36,0.12)"  },
+  { id:2, name:"Lions",             abbr:"LNS", sport:"Rugby",     n:2, rec:"14W · 2D · 6L", status:"Contenders", clr:"#ef4444", bg:"rgba(239,68,68,0.12)"   },
+  { id:3, name:"Titans",            abbr:"TTN", sport:"Cricket",   n:2, rec:"12W · 6L",      status:"Semi-final", clr:"#3b82f6", bg:"rgba(59,130,246,0.12)"  },
+  { id:4, name:"Sharks",            abbr:"SHK", sport:"Rugby",     n:1, rec:"11W · 4D · 7L", status:"Contenders", clr:"#0ea5e9", bg:"rgba(14,165,233,0.12)"  },
+];
 
-  <!-- App (babel) -->
-  <script type="text/babel" src="charts.jsx"></script>
-  <script type="text/babel" src="components.jsx"></script>
-  <script type="text/babel" src="screens-core.jsx"></script>
-  <script type="text/babel" src="screens-directory.jsx"></script>
-  <script type="text/babel" src="screens-more.jsx"></script>
-  <script type="text/babel" src="app.jsx"></script>
+const REVENUE = [
+  { m:"Jan", rev:2100, tgt:2000 },
+  { m:"Feb", rev:2350, tgt:2200 },
+  { m:"Mar", rev:2280, tgt:2300 },
+  { m:"Apr", rev:2650, tgt:2400 },
+  { m:"May", rev:2820, tgt:2500 },
+  { m:"Jun", rev:3100, tgt:2600 },
+];
+
+const SPORT_DATA = [
+  { name:"Football",  n:4, val:3780 },
+  { name:"Rugby",     n:3, val:4600 },
+  { name:"Cricket",   n:2, val:3200 },
+  { name:"Athletics", n:2, val:1600 },
+];
+
+const ACTIVITY = [
+  { txt:"Contract renewed — Kagiso Sithole (R2.1M / 2yr)",       t:"2h ago",    clr:"#10b981" },
+  { txt:"New sponsorship deal secured for Nomvula Dube",          t:"5h ago",    clr:"#3b82f6" },
+  { txt:"Performance review scheduled — Sipho Dlamini",          t:"Yesterday", clr:"#f59e0b" },
+  { txt:"Andile Khumalo contract negotiations initiated",         t:"2d ago",    clr:"#f59e0b" },
+  { txt:"Media appearance confirmed — Thabo Nkosi (SABC Sport)", t:"3d ago",    clr:"#3b82f6" },
+];
+
+const PC = ["#3b82f6","#10b981","#f59e0b","#a78bfa"];
+
+/* ── ICONS ────────────────────────────────────────────────────────────── */
+const I = {
+  Dashboard: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>,
+  Athletes:  () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="8" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v2"/><circle cx="18" cy="9" r="3"/><path d="M23 21v-2a3 3 0 0 0-3-3h-1.5"/></svg>,
+  Teams:     () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>,
+  Analytics: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>,
+  More:      () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>,
+  Bell:      () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg>,
+  Search:    () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="15" height="15"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>,
+  Chev:      () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="13" height="13"><polyline points="9 18 15 12 9 6"/></svg>,
+  X:         () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" width="17" height="17"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>,
+  Dollar:    () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>,
+  Trophy:    () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16"><polyline points="8 21 12 17 16 21"/><line x1="12" y1="17" x2="12" y2="11"/><path d="M5 7H3v5a5 5 0 0 0 9 0V7Z"/><path d="M19 7h2v5a5 5 0 0 1-9 0V7Z"/></svg>,
+  Cal:       () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>,
+  File:      () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>,
+  Gear:      () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>,
+  Help:      () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>,
+};
+
+/* ── HELPERS ──────────────────────────────────────────────────────────── */
+function Badge({ status }) {
+  return <span className={`bdg ${status}`}><span className="bdg-dot" />{status}</span>;
+}
+
+function Tip({ active, payload, label }) {
+  if (!active || !payload?.length) return null;
+  const fmt = v => typeof v === 'number' && v > 500 ? `R${(v/1000).toFixed(1)}M` : v;
+  return (
+    <div className="tt">
+      <div className="tt-label">{label}</div>
+      {payload.map((p,i) => <div key={i} className="tt-row" style={{ color:p.color }}>{p.name}: {fmt(p.value)}</div>)}
+    </div>
+  );
+}
+
+/* ── ATHLETE MODAL ────────────────────────────────────────────────────── */
+function AthleteModal({ a, onClose }) {
+  return (
+    <div className="overlay" onClick={onClose}>
+      <div className="modal" onClick={e => e.stopPropagation()}>
+        <div className="modal-handle" />
+        <div className="modal-hdr">
+          <div className="ath-ava" style={{ width:52,height:52,fontSize:18,background:`${a.clr}22`,color:a.clr }}>{a.init}</div>
+          <div style={{ flex:1 }}>
+            <div style={{ fontSize:17,fontWeight:800 }}>{a.name}</div>
+            <div style={{ fontSize:12,color:'var(--text2)',marginTop:2 }}>{a.pos} · {a.team}</div>
+            <div style={{ marginTop:6 }}><Badge status={a.status} /></div>
+          </div>
+          <button onClick={onClose} style={{ background:'none',border:'none',color:'var(--text2)',cursor:'pointer',padding:4 }}>
+            <I.X />
+          </button>
+        </div>
+        <div className="modal-stat-grid">
+          {Object.entries(a.stats).map(([k,v]) => (
+            <div className="m-stat" key={k}>
+              <div className="v" style={{ color:a.clr }}>{v}</div>
+              <div className="l">{k}</div>
+            </div>
+          ))}
+        </div>
+        <div className="m-row">
+          <div className="m-pill">
+            <div className="pl">Contract Value</div>
+            <div className="pv" style={{ color:'var(--green)' }}>R{(a.cv/1000000).toFixed(2)}M</div>
+          </div>
+          <div className="m-pill">
+            <div className="pl">Contract Expires</div>
+            <div className="pv">{a.exp}</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── DASHBOARD ────────────────────────────────────────────────────────── */
+function Dashboard({ goto }) {
+  const totalCV = ATHLETES.reduce((s,a) => s + a.cv, 0);
+  const activeN = ATHLETES.filter(a => a.status === 'active').length;
+  return (
+    <div className="screen">
+      <div className="kpi-grid">
+        <div className="kpi">
+          <div className="kpi-ico" style={{ background:'var(--blue-g)',color:'var(--blue)' }}><I.Athletes /></div>
+          <div className="kpi-val">{ATHLETES.length}</div>
+          <div className="kpi-lbl">Total Athletes</div>
+          <div className="kpi-trend up">↑ +2 this quarter</div>
+        </div>
+        <div className="kpi">
+          <div className="kpi-ico" style={{ background:'var(--green-g)',color:'var(--green)' }}><I.Trophy /></div>
+          <div className="kpi-val">{activeN}</div>
+          <div className="kpi-lbl">Active Contracts</div>
+          <div className="kpi-trend up">↑ {Math.round(activeN/ATHLETES.length*100)}% rate</div>
+        </div>
+        <div className="kpi">
+          <div className="kpi-ico" style={{ background:'rgba(245,158,11,0.12)',color:'var(--amber)' }}><I.Dollar /></div>
+          <div className="kpi-val">R{(totalCV/1000000).toFixed(1)}M</div>
+          <div className="kpi-lbl">Portfolio Value</div>
+          <div className="kpi-trend up">↑ 12% YoY</div>
+        </div>
+        <div className="kpi">
+          <div className="kpi-ico" style={{ background:'rgba(139,92,246,0.12)',color:'var(--purple)' }}><I.Cal /></div>
+          <div className="kpi-val">8</div>
+          <div className="kpi-lbl">Upcoming Events</div>
+          <div className="kpi-trend warn">Next in 3 days</div>
+        </div>
+      </div>
+
+      <div className="chart-card">
+        <div className="chart-title">Revenue Trend (R'000)</div>
+        <ResponsiveContainer width="100%" height={150}>
+          <AreaChart data={REVENUE} margin={{ top:4,right:4,left:-22,bottom:0 }}>
+            <defs>
+              <linearGradient id="gR" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%"  stopColor="#3b82f6" stopOpacity={0.35}/>
+                <stop offset="95%" stopColor="#3b82f6" stopOpacity={0}/>
+              </linearGradient>
+              <linearGradient id="gT" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="5%"  stopColor="#10b981" stopOpacity={0.2}/>
+                <stop offset="95%" stopColor="#10b981" stopOpacity={0}/>
+              </linearGradient>
+            </defs>
+            <CartesianGrid strokeDasharray="3 3" stroke="#1a2d48" vertical={false}/>
+            <XAxis dataKey="m" tick={{ fill:'#6b84a8',fontSize:10 }} axisLine={false} tickLine={false}/>
+            <YAxis tick={{ fill:'#6b84a8',fontSize:10 }} axisLine={false} tickLine={false}/>
+            <Tooltip content={<Tip />}/>
+            <Area type="monotone" dataKey="rev" name="Revenue" stroke="#3b82f6" strokeWidth={2.5} fill="url(#gR)" dot={false}/>
+            <Area type="monotone" dataKey="tgt" name="Target"  stroke="#10b981" strokeWidth={1.5} fill="url(#gT)" strokeDasharray="5 3" dot={false}/>
+          </AreaChart>
+        </ResponsiveContainer>
+      </div>
+
+      <div className="sec-hdr">
+        <span className="sec-title">Top Athletes</span>
+        <span className="sec-link" onClick={() => goto('athletes')}>View All</span>
+      </div>
+      <div className="ath-grid">
+        {ATHLETES.slice(0,4).map(a => (
+          <div className="ath-card" key={a.id}>
+            <div className="ath-ava" style={{ background:`${a.clr}20`,color:a.clr }}>{a.init}</div>
+            <div className="ath-name">{a.name}</div>
+            <div className="ath-sub">{a.sport} · {a.pos}</div>
+            <div className="ath-stat" style={{ color:a.clr }}>{a.stat}</div>
+          </div>
+        ))}
+      </div>
+
+      <div className="sec-hdr" style={{ marginTop:4 }}>
+        <span className="sec-title">Recent Activity</span>
+      </div>
+      <div className="chart-card" style={{ padding:'8px 14px' }}>
+        {ACTIVITY.map((a,i) => (
+          <div className="act-item" key={i}>
+            <div className="act-dot" style={{ background:a.clr }}/>
+            <div className="act-txt">{a.txt}</div>
+            <div className="act-t">{a.t}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ── ATHLETES ─────────────────────────────────────────────────────────── */
+function Athletes() {
+  const [q, setQ] = useState('');
+  const [sport, setSport] = useState('All');
+  const [sel, setSel] = useState(null);
+  const SPORTS = ['All','Football','Rugby','Cricket','Athletics'];
+  const list = useMemo(() => ATHLETES.filter(a => {
+    const ms = sport === 'All' || a.sport === sport;
+    const mq = !q || a.name.toLowerCase().includes(q.toLowerCase()) || a.team.toLowerCase().includes(q.toLowerCase());
+    return ms && mq;
+  }), [q, sport]);
+  return (
+    <div className="screen">
+      <div className="pg-hdr">
+        <div className="pg-title">Athletes</div>
+        <div className="pg-sub">{ATHLETES.length} managed · {ATHLETES.filter(a=>a.status==='active').length} active contracts</div>
+      </div>
+      <div className="search">
+        <I.Search />
+        <input placeholder="Search athletes or teams…" value={q} onChange={e=>setQ(e.target.value)}/>
+      </div>
+      <div className="chips">
+        {SPORTS.map(s => <div key={s} className={`chip ${sport===s?'on':''}`} onClick={()=>setSport(s)}>{s}</div>)}
+      </div>
+      {list.length === 0
+        ? <div className="empty"><div className="empty-ico">🔍</div>No athletes found</div>
+        : <div className="ath-grid">
+            {list.map(a => (
+              <div className="ath-card" key={a.id} onClick={()=>setSel(a)}>
+                <div style={{ display:'flex',justifyContent:'space-between',alignItems:'flex-start',marginBottom:8 }}>
+                  <div className="ath-ava" style={{ width:38,height:38,fontSize:12,background:`${a.clr}20`,color:a.clr }}>{a.init}</div>
+                  <Badge status={a.status}/>
+                </div>
+                <div className="ath-name">{a.name}</div>
+                <div className="ath-sub">{a.pos}</div>
+                <div className="ath-sub">{a.team}</div>
+                <div className="ath-stat" style={{ color:a.clr }}>{a.stat}</div>
+              </div>
+            ))}
+          </div>
+      }
+      {sel && <AthleteModal a={sel} onClose={()=>setSel(null)}/>}
+    </div>
+  );
+}
+
+/* ── TEAMS ────────────────────────────────────────────────────────────── */
+function Teams() {
+  return (
+    <div className="screen">
+      <div className="pg-hdr">
+        <div className="pg-title">Teams</div>
+        <div className="pg-sub">{TEAMS.length} partner organisations</div>
+      </div>
+      <div className="chart-card">
+        <div className="chart-title">Athletes by Sport</div>
+        <ResponsiveContainer width="100%" height={140}>
+          <BarChart data={SPORT_DATA} margin={{ top:4,right:4,left:-22,bottom:0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#1a2d48" vertical={false}/>
+            <XAxis dataKey="name" tick={{ fill:'#6b84a8',fontSize:10 }} axisLine={false} tickLine={false}/>
+            <YAxis tick={{ fill:'#6b84a8',fontSize:10 }} axisLine={false} tickLine={false} allowDecimals={false}/>
+            <Tooltip content={<Tip />}/>
+            <Bar dataKey="n" name="Athletes" radius={[5,5,0,0]}>
+              {SPORT_DATA.map((_,i) => <Cell key={i} fill={PC[i]}/>)}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+      {TEAMS.map(t => (
+        <div className="team-card" key={t.id}>
+          <div className="team-logo" style={{ background:t.bg,color:t.clr }}>{t.abbr}</div>
+          <div>
+            <div className="team-name">{t.name}</div>
+            <div className="team-sport">{t.sport}</div>
+            <div className="team-rec">{t.rec}</div>
+            <div style={{ marginTop:5 }}>
+              <span className="bdg" style={{ background:`${t.clr}15`,color:t.clr }}>
+                <span className="bdg-dot" style={{ background:t.clr }}/>{t.status}
+              </span>
+            </div>
+          </div>
+          <div className="team-right">
+            <div className="team-n">{t.n}</div>
+            <div className="team-nl">Athletes</div>
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+/* ── ANALYTICS ────────────────────────────────────────────────────────── */
+function Analytics() {
+  const ratings = ATHLETES.map(a => a.stats.Rating).filter(Boolean);
+  const avgR = (ratings.reduce((s,v)=>s+v,0)/ratings.length).toFixed(1);
+  const totalCV = ATHLETES.reduce((s,a)=>s+a.cv,0);
+  const topA = [...ATHLETES].sort((a,b)=>b.cv-a.cv)[0];
+  const expN = ATHLETES.filter(a=>a.exp.includes('2025')).length;
+  const rData = ATHLETES.map(a => ({ n:a.init, r:a.stats.Rating||7.5, clr:a.clr }));
+  return (
+    <div className="screen">
+      <div className="pg-hdr">
+        <div className="pg-title">Analytics</div>
+        <div className="pg-sub">Portfolio intelligence overview</div>
+      </div>
+      <div className="stat-pair">
+        <div className="stat-box">
+          <div className="sv" style={{ color:'var(--blue)' }}>{avgR}</div>
+          <div className="sl">Avg. Performance Rating</div>
+          <div className="sd up">Top: {ATHLETES.reduce((a,b)=>b.stats.Rating>a.stats.Rating?b:a).init}</div>
+        </div>
+        <div className="stat-box">
+          <div className="sv" style={{ color:'var(--amber)' }}>{expN}</div>
+          <div className="sl">Contracts Expiring 2025</div>
+          <div className="sd warn">Action required</div>
+        </div>
+      </div>
+      <div className="chart-card">
+        <div className="chart-title">Performance Ratings</div>
+        <ResponsiveContainer width="100%" height={150}>
+          <BarChart data={rData} margin={{ top:4,right:4,left:-22,bottom:0 }}>
+            <CartesianGrid strokeDasharray="3 3" stroke="#1a2d48" vertical={false}/>
+            <XAxis dataKey="n" tick={{ fill:'#6b84a8',fontSize:10 }} axisLine={false} tickLine={false}/>
+            <YAxis domain={[6.5,10]} tick={{ fill:'#6b84a8',fontSize:10 }} axisLine={false} tickLine={false}/>
+            <Tooltip content={<Tip />}/>
+            <Bar dataKey="r" name="Rating" radius={[4,4,0,0]}>
+              {rData.map((d,i) => <Cell key={i} fill={d.clr}/>)}
+            </Bar>
+          </BarChart>
+        </ResponsiveContainer>
+      </div>
+      <div className="chart-card">
+        <div className="chart-title">Portfolio Value by Sport</div>
+        <div style={{ display:'flex',alignItems:'center',gap:14 }}>
+          <ResponsiveContainer width="46%" height={120}>
+            <PieChart>
+              <Pie data={SPORT_DATA} dataKey="val" cx="50%" cy="50%" innerRadius={30} outerRadius={54} stroke="none">
+                {SPORT_DATA.map((_,i) => <Cell key={i} fill={PC[i]}/>)}
+              </Pie>
+            </PieChart>
+          </ResponsiveContainer>
+          <div style={{ flex:1 }}>
+            {SPORT_DATA.map((s,i) => (
+              <div key={s.name} style={{ display:'flex',alignItems:'center',gap:8,marginBottom:9 }}>
+                <div style={{ width:8,height:8,borderRadius:'50%',background:PC[i],flexShrink:0 }}/>
+                <div style={{ fontSize:12,flex:1 }}>{s.name}</div>
+                <div style={{ fontSize:12,fontWeight:700 }}>R{(s.val/1000).toFixed(1)}M</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="insight">
+        <div className="ins-ico" style={{ background:'var(--green-g)',color:'var(--green)' }}><I.Dollar /></div>
+        <div>
+          <div className="ins-lbl">Highest Value Contract</div>
+          <div className="ins-val">{topA.name} — R{(topA.cv/1000000).toFixed(2)}M</div>
+        </div>
+      </div>
+      <div className="insight">
+        <div className="ins-ico" style={{ background:'var(--blue-g)',color:'var(--blue)' }}><I.Trophy /></div>
+        <div>
+          <div className="ins-lbl">Total Portfolio Value</div>
+          <div className="ins-val" style={{ color:'var(--blue)' }}>R{(totalCV/1000000).toFixed(2)}M</div>
+        </div>
+      </div>
+      <div className="insight">
+        <div className="ins-ico" style={{ background:'rgba(139,92,246,0.12)',color:'var(--purple)' }}><I.Athletes /></div>
+        <div>
+          <div className="ins-lbl">Sports Represented</div>
+          <div className="ins-val">{SPORT_DATA.length} disciplines · {TEAMS.length} partner clubs</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── MORE ─────────────────────────────────────────────────────────────── */
+function More() {
+  const groups = [
+    { lbl:"Management", items:[
+      { ico:<I.File />,   lbl:"Reports & Exports", clr:"#3b82f6", bg:"var(--blue-g)"              },
+      { ico:<I.Cal />,    lbl:"Calendar & Events",  clr:"#10b981", bg:"var(--green-g)"             },
+      { ico:<I.Trophy />, lbl:"Contract Manager",   clr:"#f59e0b", bg:"rgba(245,158,11,0.12)"      },
+    ]},
+    { lbl:"System", items:[
+      { ico:<I.Gear />,   lbl:"Settings",           clr:"#8b5cf6", bg:"rgba(139,92,246,0.12)"      },
+      { ico:<I.Help />,   lbl:"Help & Support",     clr:"#64748b", bg:"rgba(100,116,139,0.10)"     },
+    ]},
+  ];
+  const totalCV = ATHLETES.reduce((s,a)=>s+a.cv,0);
+  return (
+    <div className="screen">
+      <div className="prof-card">
+        <div className="prof-ava">DD</div>
+        <div>
+          <div className="prof-name">DD Sports Intelligence</div>
+          <div className="prof-role">Sports Management Platform</div>
+          <div style={{ marginTop:7 }}><span className="bdg active"><span className="bdg-dot"/>Pro Plan</span></div>
+        </div>
+      </div>
+      <div style={{ display:'grid',gridTemplateColumns:'1fr 1fr 1fr',gap:10,marginBottom:18 }}>
+        {[{v:ATHLETES.length,l:"Athletes"},{v:TEAMS.length,l:"Teams"},{v:`R${(totalCV/1000000).toFixed(1)}M`,l:"Portfolio"}].map(s=>(
+          <div key={s.l} style={{ background:'var(--card)',border:'1px solid var(--border)',borderRadius:'var(--r)',padding:12,textAlign:'center' }}>
+            <div style={{ fontSize:20,fontWeight:900,color:'var(--blue)' }}>{s.v}</div>
+            <div style={{ fontSize:10,color:'var(--text2)',marginTop:3 }}>{s.l}</div>
+          </div>
+        ))}
+      </div>
+      {groups.map(g => (
+        <div className="menu-grp" key={g.lbl}>
+          <div className="menu-lbl">{g.lbl}</div>
+          {g.items.map((item,i) => (
+            <div className="menu-item" key={i}>
+              <div className="m-ico" style={{ background:item.bg,color:item.clr }}>{item.ico}</div>
+              <div className="m-lbl">{item.lbl}</div>
+              <div className="m-chev"><I.Chev /></div>
+            </div>
+          ))}
+        </div>
+      ))}
+      <div style={{ textAlign:'center',padding:'12px 0 4px',color:'var(--text3)',fontSize:10 }}>
+        DD Sports Intelligence · v1.0 · 2025
+      </div>
+    </div>
+  );
+}
+
+/* ── APP ──────────────────────────────────────────────────────────────── */
+const NAV = [
+  { id:'dashboard', lbl:'Dashboard', Ic:I.Dashboard },
+  { id:'athletes',  lbl:'Athletes',  Ic:I.Athletes  },
+  { id:'teams',     lbl:'Teams',     Ic:I.Teams     },
+  { id:'analytics', lbl:'Analytics', Ic:I.Analytics },
+  { id:'more',      lbl:'More',      Ic:I.More      },
+];
+
+function App() {
+  const [scr, setScr] = useState('dashboard');
+  const screens = {
+    dashboard: <Dashboard goto={setScr}/>,
+    athletes:  <Athletes/>,
+    teams:     <Teams/>,
+    analytics: <Analytics/>,
+    more:      <More/>,
+  };
+  return (
+    <div className="app">
+      <header className="hdr">
+        <div className="logo-mark">DD</div>
+        <div>
+          <div className="logo-name">DD Sports</div>
+          <div className="logo-sub">Intelligence Platform</div>
+        </div>
+        <div className="hdr-right">
+          <button className="icon-btn"><I.Bell /></button>
+          <div className="hdr-avatar">VD</div>
+        </div>
+      </header>
+      <div className="content">{screens[scr]}</div>
+      <nav className="nav">
+        {NAV.map(({ id, lbl, Ic }) => (
+          <button key={id} className={`nav-btn ${scr===id?'on':''}`} onClick={() => setScr(id)}>
+            <Ic />{lbl}
+          </button>
+        ))}
+      </nav>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
 </body>
 </html>

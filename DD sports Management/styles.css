@@ -412,14 +412,6 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;letter-spacing:-0.02
 .checkbox{display:flex;align-items:center;gap:9px;cursor:pointer;color:var(--text-2)}
 .checkbox input{width:17px;height:17px;accent-color:var(--accent)}
 .login-link{color:var(--accent-soft);font-weight:600}
-.role-pick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:22px}
-.role-opt{border:1px solid var(--line);border-radius:12px;padding:12px 8px;text-align:center;
-  cursor:pointer;transition:.15s;background:var(--input-bg)}
-.role-opt:hover{border-color:var(--line-strong)}
-.role-opt.on{border-color:var(--accent);background:color-mix(in srgb,var(--accent) 10%,transparent)}
-.role-opt svg{width:20px;height:20px;margin:0 auto 7px;display:block;color:var(--text-2)}
-.role-opt.on svg{color:var(--accent-soft)}
-.role-opt small{font-size:11.5px;font-weight:600}
 
 /* ============================================================
    MISC

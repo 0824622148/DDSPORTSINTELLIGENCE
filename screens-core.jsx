@@ -60,6 +60,7 @@ function Login({ onLogin }) {
           <div className="form-group">
             <label>Email address</label>
             <input className="form-input" type="email" value={email} onChange={ev => setEmail(ev.target.value)} />
+          </div>
           <div className="form-group">
             <label>Password</label>
             <input className="form-input" type="password" defaultValue="••••••••••" />

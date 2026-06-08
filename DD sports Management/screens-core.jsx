@@ -81,8 +81,96 @@ function Login({ onLogin }) {
   );
 }
 
+// =================== SCOUTING REQUEST MODAL ===================
+function ScoutingRequestModal({ onClose, onSubmit }) {
+  const POSITIONS = ["ST","CF","LW","RW","CAM","CM","CDM","LB","RB","CB","GK"];
+  const ATTRS = ["Pace","Aerial","Technical","Leadership","Pressing","Creativity","Finishing","Composure"];
+  const [form, setForm] = useState({
+    position:"ST", foot:"Either", ageMin:"", ageMax:"",
+    heightMin:"", heightMax:"", budget:"", nationality:"", notes:"", attributes:[]
+  });
+  const set = (k, v) => setForm(f => ({...f, [k]:v}));
+  const toggleAttr = (a) => setForm(f => ({
+    ...f, attributes: f.attributes.includes(a) ? f.attributes.filter(x => x !== a) : [...f.attributes, a]
+  }));
+  const submit = (ev) => { ev.preventDefault(); onSubmit(form); onClose(); };
+  return (
+    <div className="modal-overlay" onClick={onClose}>
+      <div className="modal-box" onClick={ev => ev.stopPropagation()}>
+        <div className="modal-head">
+          <div>
+            <h3>New Scouting Request</h3>
+            <div className="ttl-sub" style={{marginTop:3}}>Define the player profile you're looking for</div>
+          </div>
+          <button className="btn btn-ghost btn-sm" type="button" onClick={onClose}><Icon name="x" size={16}/></button>
+        </div>
+        <form onSubmit={submit} className="modal-body">
+          <div className="form-row-2">
+            <div className="form-group">
+              <label>Position</label>
+              <select className="form-input" value={form.position} onChange={ev => set("position", ev.target.value)}>
+                {POSITIONS.map(p => <option key={p} value={p}>{p}</option>)}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Preferred Foot</label>
+              <select className="form-input" value={form.foot} onChange={ev => set("foot", ev.target.value)}>
+                <option>Either</option><option>Left</option><option>Right</option>
+              </select>
+            </div>
+          </div>
+          <div className="form-row-2">
+            <div className="form-group">
+              <label>Age Range</label>
+              <div style={{display:"flex",gap:8}}>
+                <input className="form-input" type="number" placeholder="Min" min={15} max={45} value={form.ageMin} onChange={ev => set("ageMin", ev.target.value)} />
+                <input className="form-input" type="number" placeholder="Max" min={15} max={45} value={form.ageMax} onChange={ev => set("ageMax", ev.target.value)} />
+              </div>
+            </div>
+            <div className="form-group">
+              <label>Height (ft)</label>
+              <div style={{display:"flex",gap:8}}>
+                <input className="form-input" type="text" placeholder="Min e.g. 5.9" value={form.heightMin} onChange={ev => set("heightMin", ev.target.value)} />
+                <input className="form-input" type="text" placeholder="Max e.g. 6.4" value={form.heightMax} onChange={ev => set("heightMax", ev.target.value)} />
+              </div>
+            </div>
+          </div>
+          <div className="form-row-2">
+            <div className="form-group">
+              <label>Max Budget</label>
+              <input className="form-input" type="text" placeholder="e.g. €25M" value={form.budget} onChange={ev => set("budget", ev.target.value)} />
+            </div>
+            <div className="form-group">
+              <label>Preferred Nationality</label>
+              <input className="form-input" type="text" placeholder="e.g. Brazilian, Spanish..." value={form.nationality} onChange={ev => set("nationality", ev.target.value)} />
+            </div>
+          </div>
+          <div className="form-group">
+            <label>Key Attributes</label>
+            <div className="attr-tags">
+              {ATTRS.map(a => (
+                <div key={a} className={"attr-tag" + (form.attributes.includes(a) ? " on" : "")} onClick={() => toggleAttr(a)}>{a}</div>
+              ))}
+            </div>
+          </div>
+          <div className="form-group">
+            <label>Additional Notes</label>
+            <textarea className="form-input" rows={3} placeholder="Any other details for the scouting team..." value={form.notes} onChange={ev => set("notes", ev.target.value)} style={{resize:"vertical"}} />
+          </div>
+          <div style={{display:"flex",gap:10,justifyContent:"flex-end",marginTop:4}}>
+            <button type="button" className="btn btn-ghost" onClick={onClose}>Cancel</button>
+            <button type="submit" className="btn btn-primary">Submit Request <Icon name="arrow-right" size={15}/></button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
 // =================== OWNER DASHBOARD ===================
 function OwnerDashboard({ onOpenPlayer, goto }) {
+  const [showRequest, setShowRequest] = useState(false);
+  const [requests, setRequests] = useState([]);
   const P = window.DD.PLAYERS;
   const months = ["Jul", "Aug", "Sep", "Oct", "Nov", "Dec", "Jan", "Feb", "Mar", "Apr", "May", "Jun"];
   const totalMV = P.reduce((a, p) => a + p.mvNum, 0);
@@ -168,7 +256,10 @@ function OwnerDashboard({ onOpenPlayer, goto }) {
             </div>
           </SectionCard>
           <SectionCard title="Transfer Opportunities" sub="Inbound interest & active windows"
-            action={<button className="btn btn-ghost btn-sm" onClick={() => goto("pipeline")}>All</button>}>
+            action={<div style={{display:"flex",gap:8}}>
+              <button className="btn btn-ghost btn-sm" onClick={() => setShowRequest(true)}><Icon name="plus" size={14}/>New Request</button>
+              <button className="btn btn-ghost btn-sm" onClick={() => goto("pipeline")}>All</button>
+            </div>}>
             <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
               {[["Mateo Rivas", "Meridian City", "€48M offer", "gold"], ["Karim El Fassi", "Lyonne AC", "Loan + option", "blue"], ["Gabriel Nunes", "Borges United", "Scouting interest", "blue"]].map((o, i) => (
                 <div key={i} className="stat-line">
@@ -184,8 +275,31 @@ function OwnerDashboard({ onOpenPlayer, goto }) {
                   <Badge tone={o[3]}>{o[2]}</Badge>
                 </div>
               ))}
+              {requests.length > 0 && (
+                <div style={{marginTop:8,paddingTop:10,borderTop:"1px solid var(--line)"}}>
+                  <div style={{fontSize:10.5,fontWeight:700,letterSpacing:".12em",textTransform:"uppercase",color:"var(--text-3)",marginBottom:8}}>Scouting Requests</div>
+                  {requests.map((r, i) => (
+                    <div key={i} className="stat-line" style={{marginBottom:4}}>
+                      <div style={{display:"flex",alignItems:"center",gap:12}}>
+                        <div style={{width:36,height:36,borderRadius:10,display:"grid",placeItems:"center",background:"color-mix(in srgb,var(--accent) 14%,transparent)",color:"var(--accent)",flexShrink:0}}>
+                          <Icon name="target" size={16}/>
+                        </div>
+                        <div>
+                          <div style={{fontWeight:600}}>{r.position} · {r.foot} foot{r.budget ? " · " + r.budget : ""}</div>
+                          <div className="dim" style={{fontSize:12}}>
+                            {[r.ageMin && r.ageMax && `Age ${r.ageMin}–${r.ageMax}`, r.heightMin && r.heightMax && `${r.heightMin}–${r.heightMax} ft`, r.nationality].filter(Boolean).join(" · ") || "No additional filters"}
+                            {r.attributes.length > 0 && <span style={{marginLeft:4}}>{r.attributes.slice(0,3).map(a => <Badge key={a} tone="blue" style={{marginLeft:3,fontSize:10}}>{a}</Badge>)}</span>}
+                          </div>
+                        </div>
+                      </div>
+                      <Badge tone="gray">Pending</Badge>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </SectionCard>
+          {showRequest && <ScoutingRequestModal onClose={() => setShowRequest(false)} onSubmit={r => setRequests(rs => [...rs, r])} />}
         </div>
         <SectionCard title="Recent Activity" action={<button className="btn btn-ghost btn-sm">All</button>}>
           <Feed items={window.DD.ACTIVITY} limit={7} />

@@ -386,6 +386,7 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;letter-spacing:-0.02
 .login-hero .hero-logo{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
 .login-hero .hero-logo img{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 4px 16px rgba(0,0,0,.4))}
 .login-hero .hero-logo b{font-family:var(--font-display);font-size:22px;font-weight:700;letter-spacing:.01em;text-shadow:0 2px 12px rgba(0,0,0,.4)}
+.login-hero .hero-platform{font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#6f93ff;text-shadow:0 0 18px rgba(111,147,255,.5)}
 .login-form-wrap{display:grid;place-items:center;padding:40px;background:var(--bg);background-image:var(--bg-grad)}
 .login-form{width:100%;max-width:380px}
 .login-form h1{font-size:28px;margin-bottom:8px}

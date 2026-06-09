@@ -37,6 +37,7 @@ function Login({ onLogin }) {
         <div className="hero-logo">
           <img src="assets/mark-white.png" alt="DD" />
           <b>D.D Sports Management</b>
+          <span className="hero-platform">Intelligence Platform</span>
         </div>
       </div>
       <div className="login-form-wrap">

@@ -380,25 +380,12 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;letter-spacing:-0.02
   background:
     linear-gradient(180deg,rgba(3,18,66,.93) 0%,rgba(3,18,66,.62) 38%,rgba(2,16,63,.50) 55%,rgba(3,18,66,.72) 78%,rgba(2,16,63,.92) 100%),
     url('assets/soccer-hero.jpg') center 60% / cover no-repeat;
-  color:#fff;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:52px}
-.login-hero .pitch{position:absolute;inset:0;opacity:.15;pointer-events:none}
+  color:#fff;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:52px}
 .login-hero .glow{position:absolute;width:560px;height:560px;border-radius:50%;
   background:radial-gradient(circle,rgba(91,130,255,.22),transparent 65%);top:-160px;right:-120px;filter:blur(10px)}
-.login-hero .hero-top{display:flex;align-items:center;gap:13px;position:relative;z-index:2}
-.login-hero .hero-top img{width:44px;height:44px;object-fit:contain}
-.login-hero .hero-top b{font-family:var(--font-display);font-size:18px;letter-spacing:.01em}
-.login-hero .hero-top span{font-family:var(--font-mono);font-size:9px;letter-spacing:.18em;
-  text-transform:uppercase;color:#9fb0e8;display:block;margin-top:2px}
-.login-hero .hero-mid{position:relative;z-index:2;max-width:520px}
-.login-hero .hero-mid .tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.2em;
-  text-transform:uppercase;color:var(--gold-soft);margin-bottom:20px}
-.login-hero .hero-mid h2{font-family:var(--font-display);font-size:52px;font-weight:600;line-height:1.04;letter-spacing:-.02em}
-.login-hero .hero-mid h2 em{font-style:italic;color:var(--gold-soft)}
-.login-hero .hero-mid p{color:#b9c6ee;font-size:15px;margin-top:18px;max-width:430px;line-height:1.6}
-.login-hero .hero-stats{display:flex;gap:36px;position:relative;z-index:2;border-top:1px solid rgba(255,255,255,.12);padding-top:26px}
-.login-hero .hero-stats .hs b{font-family:var(--font-display);font-size:30px;font-weight:700;display:block}
-.login-hero .hero-stats .hs span{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.12em;
-  text-transform:uppercase;color:#9fb0e8}
+.login-hero .hero-logo{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:18px;text-align:center}
+.login-hero .hero-logo img{width:72px;height:72px;object-fit:contain;filter:drop-shadow(0 4px 16px rgba(0,0,0,.4))}
+.login-hero .hero-logo b{font-family:var(--font-display);font-size:22px;font-weight:700;letter-spacing:.01em;text-shadow:0 2px 12px rgba(0,0,0,.4)}
 .login-form-wrap{display:grid;place-items:center;padding:40px;background:var(--bg);background-image:var(--bg-grad)}
 .login-form{width:100%;max-width:380px}
 .login-form h1{font-size:28px;margin-bottom:8px}

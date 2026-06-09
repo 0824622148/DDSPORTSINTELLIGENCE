@@ -33,24 +33,10 @@ function Login({ onLogin }) {
   return (
     <div className="login">
       <div className="login-hero">
-        <PitchLines />
         <div className="glow"></div>
-        <div className="hero-top">
+        <div className="hero-logo">
           <img src="assets/mark-white.png" alt="DD" />
-          <div>
-            <b>D.D Sports Management</b>
-            <span>Confía en tu destino</span>
-          </div>
-        </div>
-        <div className="hero-mid">
-          <div className="tag">Football Agency Intelligence</div>
-          <h2>Where talent meets <em>opportunity.</em></h2>
-          <p>The centralized command center for elite player management — performance, market value, scouting and recruitment, in one premium platform.</p>
-        </div>
-        <div className="hero-stats">
-          <div className="hs"><b>17</b><span>Players</span></div>
-          <div className="hs"><b>€336M</b><span>Portfolio Value</span></div>
-          <div className="hs"><b>4</b><span>Global Scouts</span></div>
+          <b>D.D Sports Management</b>
         </div>
       </div>
       <div className="login-form-wrap">

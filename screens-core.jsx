@@ -27,7 +27,8 @@ function Login({ onLogin }) {
     const v = e.toLowerCase();
     if (v.includes("scout")) return "scout";
     if (v.includes("player")) return "player";
-    return "owner";
+    if (v.includes("club")) return "club";
+    return "admin";
   };
   const submit = (e) => { e.preventDefault(); onLogin(deriveRole(email)); };
   return (

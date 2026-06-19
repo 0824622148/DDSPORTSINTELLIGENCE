@@ -176,7 +176,7 @@ function Topbar({ crumb, persona, role, onRole, theme, onTheme, onMenu, onBell, 
         <span className="kbd">⌘K</span>
       </div>
       <div className="seg persona-seg">
-        {[["owner", "Owner"], ["scout", "Scout"], ["player", "Player"]].map(([k, l]) => (
+        {[["admin", "Admin"], ["scout", "Scout"], ["club", "Club"], ["player", "Player"]].map(([k, l]) => (
           <button key={k} className={role === k ? "on" : ""} onClick={() => onRole(k)}>{l}</button>
         ))}
       </div>
@@ -233,4 +233,24 @@ function SectionCard({ title, sub, action, children, className, style }) {
   );
 }
 
-Object.assign(window, { Icon, Avatar, Badge, StatusBadge, PosTag, RatingPill, Meter, KPI, Sidebar, Topbar, Feed, SectionCard });
+function BenchmarkBar({ label, value, unit, percentile }) {
+  const pct = Math.max(1, Math.min(99, percentile || 50));
+  const tier = pct >= 90 ? "Top 10%" : pct >= 75 ? "Top 25%" : pct >= 50 ? "Above Avg" : pct >= 25 ? "Average" : "Below Avg";
+  const color = pct >= 75 ? "var(--green)" : pct >= 50 ? "var(--accent)" : pct >= 25 ? "var(--amber)" : "var(--red)";
+  return (
+    <div style={{ marginBottom: 15 }}>
+      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: 6 }}>
+        <span style={{ fontSize: 13, color: "var(--text-2)" }}>{label}</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <b className="mono" style={{ fontSize: 13 }}>{value != null ? value + (unit || "") : "—"}</b>
+          <span style={{ fontSize: 11, fontWeight: 700, color, fontFamily: "var(--font-mono)", minWidth: 76, textAlign: "right" }}>{tier}</span>
+        </div>
+      </div>
+      <div style={{ height: 7, background: "var(--surface-3)", borderRadius: 4, overflow: "hidden" }}>
+        <div style={{ height: "100%", width: pct + "%", background: color, borderRadius: 4, transition: "width .5s ease" }} />
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { Icon, Avatar, Badge, StatusBadge, PosTag, RatingPill, Meter, KPI, Sidebar, Topbar, Feed, SectionCard, BenchmarkBar });

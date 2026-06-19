@@ -194,4 +194,46 @@ function Gauge({ value, max = 10, size = 92, color = "var(--accent)", label }) {
   );
 }
 
-Object.assign(window, { LineChart, MultiLineChart, BarChart, Donut, Sparkline, FunnelBars, Gauge, smoothPath });
+// Spider / radar chart for player comparison
+function RadarChart({ axes, size = 300, colorA = "var(--accent)", colorB = "var(--gold)", nameA = "Player A", nameB = "Player B" }) {
+  if (!axes || axes.length < 3) return null;
+  const W = size, H = size, cx = W / 2, cy = H / 2;
+  const r = W * 0.34;
+  const n = axes.length;
+  const ang = (i) => (2 * Math.PI * i / n) - Math.PI / 2;
+  const pt = (val, i) => {
+    const a = ang(i), d = r * Math.max(0, Math.min(100, val || 0)) / 100;
+    return [cx + d * Math.cos(a), cy + d * Math.sin(a)];
+  };
+  const poly = (getter) => axes.map((ax, i) => pt(getter(ax), i)).map(p => p.join(",")).join(" ");
+  return (
+    <div>
+      <svg width={W} height={H} viewBox={`0 0 ${W} ${H}`}>
+        {[25, 50, 75, 100].map(pct => (
+          <polygon key={pct} points={axes.map((_, i) => pt(pct, i).join(",")).join(" ")}
+            fill="none" stroke="var(--grid-line)" strokeWidth="1" />
+        ))}
+        {axes.map((_, i) => {
+          const [x, y] = pt(100, i);
+          return <line key={i} x1={cx} y1={cy} x2={x} y2={y} stroke="var(--grid-line)" strokeWidth="1" />;
+        })}
+        <polygon points={poly(ax => ax.b)} fill={colorB} fillOpacity="0.15" stroke={colorB} strokeWidth="2" strokeLinejoin="round" />
+        <polygon points={poly(ax => ax.a)} fill={colorA} fillOpacity="0.18" stroke={colorA} strokeWidth="2" strokeLinejoin="round" />
+        {axes.map((ax, i) => { const p = pt(ax.a, i); return <circle key={"a" + i} cx={p[0]} cy={p[1]} r="4" fill={colorA} />; })}
+        {axes.map((ax, i) => { const p = pt(ax.b, i); return <circle key={"b" + i} cx={p[0]} cy={p[1]} r="4" fill={colorB} />; })}
+        {axes.map((ax, i) => {
+          const [x, y] = pt(122, i);
+          const ta = Math.abs(x - cx) < 8 ? "middle" : x > cx ? "start" : "end";
+          return <text key={i} x={x} y={y + 4} textAnchor={ta} fill="var(--text-2)"
+            style={{ fontSize: 11, fontFamily: "var(--font-mono)" }}>{ax.label}</text>;
+        })}
+      </svg>
+      <div className="legend" style={{ marginTop: 8, justifyContent: "center" }}>
+        <div className="li"><span className="sw" style={{ background: colorA }}></span>{nameA}</div>
+        <div className="li"><span className="sw" style={{ background: colorB }}></span>{nameB}</div>
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { LineChart, MultiLineChart, BarChart, Donut, Sparkline, FunnelBars, Gauge, RadarChart, smoothPath });

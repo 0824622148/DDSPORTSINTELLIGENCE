@@ -22,6 +22,7 @@ const NAV = {
       { id: "compare",     label: "Compare Players",  icon: "layers"    },
     ]},
     { label: "Operations", items: [
+      { id: "roster",      label: "Managed Players",  icon: "shield"    },
       { id: "pipeline",    label: "Recruitment",      icon: "target"    },
       { id: "scoutdash",   label: "Scouting",         icon: "search"    },
       { id: "documents",   label: "Documents",        icon: "folder"    },
@@ -84,6 +85,7 @@ const CRUMB = {
   playerdash:    { section: "My Career",    page: "Dashboard"          },
   documents:     { section: "Files",        page: "Documents"          },
   notifications: { section: "Account",      page: "Notifications"      },
+  roster:        { section: "Operations",   page: "Managed Players"    },
   benchmarks:    { section: "Analytics",    page: "Benchmarking Engine"},
   compare:       { section: "Analytics",    page: "Player Comparison"  },
 };
@@ -160,6 +162,7 @@ function App() {
       case "dashboard":     return <S.OwnerDashboard onOpenPlayer={openPlayer} goto={goto} />;
       case "directory":     return <S.PlayerDirectory onOpenPlayer={openPlayer} />;
       case "profile":       return <S.PlayerProfile player={player} onBack={() => goto(role === "player" ? "playerdash" : "directory")} />;
+      case "roster":        return <S.ManagedRoster onOpenPlayer={openPlayer} />;
       case "pipeline":      return <S.RecruitmentPipeline />;
       case "scoutdash":     return <S.ScoutDashboard onOpenPlayer={openPlayer} />;
       case "playerdash":    return <S.PlayerDashboard player={window.DD.PLAYERS[0]} />;

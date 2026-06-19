@@ -343,5 +343,78 @@ function Notifications() {
   );
 }
 
+// =================== MANAGED ROSTER ===================
+function ManagedRoster({ onOpenPlayer }) {
+  const managed = window.DD.PLAYERS.filter(p => p.agent && p.agent !== "—");
+  const agentMap = {};
+  managed.forEach(p => {
+    if (!agentMap[p.agent]) agentMap[p.agent] = [];
+    agentMap[p.agent].push(p);
+  });
+  const totalMV = managed.reduce((s, p) => s + p.mvNum, 0).toFixed(1);
+  const risks    = managed.filter(p => p.status === "Contract Risk").length;
+  const active   = managed.filter(p => p.status === "Active").length;
+
+  const pill = (status) => {
+    const t = { "Active": "green", "Contract Risk": "red", "Prospect": "gold" }[status] || "accent";
+    return { padding: "3px 10px", borderRadius: 999, fontSize: 11, fontWeight: 600, whiteSpace: "nowrap",
+      background: `color-mix(in srgb,var(--${t}) 14%,transparent)`, color: `var(--${t})` };
+  };
+
+  return (
+    <div className="fade-in">
+      <div className="page-head">
+        <div>
+          <div className="eyebrow">DD Sports Management</div>
+          <h1>Managed Players</h1>
+          <div className="sub">{managed.length} players under management · {Object.keys(agentMap).length} agents</div>
+        </div>
+        <button className="btn btn-primary"><Icon name="plus" size={16} />Add Player</button>
+      </div>
+
+      <div className="grid cols-4" style={{ marginBottom: 18 }}>
+        <KPI icon="users" label="Total Clients"    value={managed.length}      delta="across 3 agents"        tone="blue"  />
+        <KPI icon="trend" label="Portfolio Value"  value={"€" + totalMV + "M"} delta="combined market value"  tone="green" />
+        <KPI icon="check" label="Active Contracts" value={active}               delta={active + " in season"}  tone="green" deltaDir="up" />
+        <KPI icon="zap"   label="Contract Risk"    value={risks}                delta="expiring soon"          tone="red"   deltaDir={risks > 0 ? "down" : "up"} />
+      </div>
+
+      {Object.entries(agentMap).map(([agent, players]) => {
+        const agMV = players.reduce((s, p) => s + p.mvNum, 0).toFixed(1);
+        return (
+          <div key={agent} style={{ marginBottom: 20 }}>
+            <SectionCard title={agent} sub={players.length + " clients · €" + agMV + "M portfolio"}>
+              {players.map((p, i) => (
+                <div key={p.id}
+                  onClick={() => onOpenPlayer && onOpenPlayer(p.id)}
+                  onMouseEnter={e => e.currentTarget.style.background = "var(--surface-2)"}
+                  onMouseLeave={e  => e.currentTarget.style.background = ""}
+                  style={{ display: "flex", alignItems: "center", gap: 14, padding: "11px 6px", cursor: "pointer",
+                    borderBottom: i < players.length - 1 ? "1px solid var(--line)" : "none", borderRadius: 8 }}>
+                  <Avatar name={p.name} color={p.avColor} size={42} />
+                  <div style={{ flex: 1, minWidth: 0 }}>
+                    <div style={{ fontWeight: 600, fontSize: 14 }}>{p.flag} {p.name} <PosTag pos={p.pos} /></div>
+                    <div className="dim" style={{ fontSize: 12, marginTop: 2 }}>{p.posFull} · {p.club} · {p.league}</div>
+                  </div>
+                  <div style={{ textAlign: "right", minWidth: 72 }}>
+                    <div style={{ fontWeight: 700, fontSize: 14, color: "var(--text-1)" }}>{p.mv}</div>
+                    <div className="dim" style={{ fontSize: 11 }}>Market Value</div>
+                  </div>
+                  <div style={{ textAlign: "center", minWidth: 52 }}>
+                    <div style={{ fontWeight: 700, fontSize: 14 }}>{p.rating}</div>
+                    <div className="dim" style={{ fontSize: 11 }}>Rating</div>
+                  </div>
+                  <span style={pill(p.status)}>{p.status}</span>
+                  <Icon name="chevron-right" size={14} style={{ color: "var(--text-3)", flex: "none" }} />
+                </div>
+              ))}
+            </SectionCard>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
 window.Screens = window.Screens || {};
-Object.assign(window.Screens, { ScoutDashboard, RecruitmentPipeline, PlayerDashboard, Documents, Notifications });
+Object.assign(window.Screens, { ScoutDashboard, RecruitmentPipeline, PlayerDashboard, Documents, Notifications, ManagedRoster });

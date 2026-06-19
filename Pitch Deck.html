@@ -1,0 +1,1541 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DD Sports Intelligence — Pitch Deck</title>
+<link rel="icon" type="image/png" href="assets/mark-navy.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;0,6..72,600;0,6..72,700;0,6..72,800;1,6..72,400;1,6..72,500;1,6..72,600&family=Hanken+Grotesk:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ─── RESET ─── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+img{display:block;max-width:100%}
+a{text-decoration:none;color:inherit}
+
+/* ─── TOKENS ─── */
+:root{
+  --navy:#031d72;--navy-600:#0a2a8c;--navy-400:#2a47ad;
+  --accent:#5b82ff;--accent-soft:#9fb6ff;
+  --gold:#c8a24a;--gold-soft:#e3c987;--gold-deep:#a07832;
+  --green:#3fae7a;--red:#e0556b;--amber:#e0a23c;
+  --bg:#070b16;--surface:#0e1426;--surface-2:#131b32;--surface-3:#1a2440;
+  --text:#eaeefb;--text-2:#9fb0d6;--text-3:#6b7aa3;
+  --line:rgba(255,255,255,.08);--line-md:rgba(255,255,255,.12);--line-strong:rgba(255,255,255,.18);
+  --font-display:'Newsreader',Georgia,serif;
+  --font-body:'Hanken Grotesk',system-ui,sans-serif;
+  --font-mono:'JetBrains Mono',monospace;
+  --doc-max:1200px;
+  --sec-pad-v:100px;--sec-pad-h:80px;
+  --card-radius:18px;--card-radius-sm:12px;
+}
+
+/* ─── BASE ─── */
+body{font-family:var(--font-body);font-size:16px;line-height:1.7;color:var(--text-2);background:var(--bg);-webkit-font-smoothing:antialiased}
+
+/* ─── TYPOGRAPHY ─── */
+.t-display{font-family:var(--font-display);font-size:clamp(52px,6vw,88px);font-weight:700;letter-spacing:-.025em;line-height:1.02;color:var(--text)}
+.t-h1{font-family:var(--font-display);font-size:clamp(36px,4vw,56px);font-weight:700;letter-spacing:-.022em;line-height:1.05;color:var(--text)}
+.t-h2{font-family:var(--font-display);font-size:clamp(26px,3vw,40px);font-weight:700;letter-spacing:-.018em;line-height:1.1;color:var(--text)}
+.t-h3{font-family:var(--font-display);font-size:22px;font-weight:700;letter-spacing:-.015em;color:var(--text)}
+.t-h4{font-family:var(--font-display);font-size:18px;font-weight:700;letter-spacing:-.01em;color:var(--text)}
+.eyebrow{font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:var(--text-3)}
+.eyebrow-gold{color:var(--gold-soft)}
+em.gold{font-style:italic;color:var(--gold-soft)}
+.stat-hero{font-family:var(--font-display);font-size:clamp(36px,4.5vw,56px);font-weight:700;letter-spacing:-.03em;color:var(--text)}
+.gold-rule{display:block;width:48px;height:3px;background:linear-gradient(90deg,var(--gold),var(--gold-soft));border-radius:2px;margin-bottom:20px}
+
+/* ─── LAYOUT ─── */
+.sec{position:relative;overflow:hidden}
+.sec-inner{max-width:var(--doc-max);margin:0 auto;padding:var(--sec-pad-v) var(--sec-pad-h);position:relative;z-index:2}
+.grid-2{display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:24px}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.grid-60-40{display:grid;grid-template-columns:1.5fr 1fr;gap:64px;align-items:center}
+.grid-40-60{display:grid;grid-template-columns:1fr 1.5fr;gap:64px;align-items:start}
+.sec-header{margin-bottom:56px}
+.sec-header .eyebrow{margin-bottom:14px}
+.sec-header .t-h1{margin-bottom:16px}
+.sec-header p{font-size:17px;color:var(--text-2);max-width:600px}
+
+/* ─── SECTION BACKGROUNDS ─── */
+.sec-cover{background:linear-gradient(160deg,#030d3a 0%,#031d72 50%,#02103f 100%)}
+.sec-dark{background:var(--bg)}
+.sec-dark::before{content:'';position:absolute;top:0;left:0;width:600px;height:600px;background:radial-gradient(circle at 0% 0%,rgba(14,28,64,.9),transparent 65%);pointer-events:none;z-index:0}
+.sec-mid{background:var(--surface)}
+.sec-navy{background:linear-gradient(135deg,#031d72 0%,#0a2a8c 60%,#031d72 100%)}
+
+/* ─── CARDS ─── */
+.p-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--card-radius);padding:28px 32px}
+.p-card-glass{background:rgba(14,20,38,.7);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.10);border-radius:var(--card-radius);padding:28px 32px}
+.p-card-gold{border-color:rgba(200,162,74,.3);background:linear-gradient(135deg,rgba(200,162,74,.06),transparent 60%)}
+.p-card-sm{padding:20px 24px}
+
+/* ─── DECORATIVE ORBS ─── */
+.orb{position:absolute;border-radius:50%;pointer-events:none;filter:blur(80px)}
+.orb-blue{background:radial-gradient(circle,rgba(61,107,255,.5),transparent 65%)}
+.orb-gold{background:radial-gradient(circle,rgba(200,162,74,.45),transparent 65%)}
+.orb-navy{background:radial-gradient(circle,rgba(10,42,140,.8),transparent 60%)}
+.orb-green{background:radial-gradient(circle,rgba(63,174,122,.4),transparent 65%)}
+
+/* ─── BADGES ─── */
+.badge{display:inline-flex;align-items:center;gap:5px;font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:4px 10px;border-radius:20px}
+.badge-blue{background:rgba(91,130,255,.15);color:#9fb6ff;border:1px solid rgba(91,130,255,.25)}
+.badge-gold{background:rgba(200,162,74,.15);color:var(--gold-soft);border:1px solid rgba(200,162,74,.25)}
+.badge-green{background:rgba(63,174,122,.15);color:#6fd4a6;border:1px solid rgba(63,174,122,.25)}
+.badge-red{background:rgba(224,85,107,.15);color:#f08096;border:1px solid rgba(224,85,107,.25)}
+.badge-amber{background:rgba(224,162,60,.15);color:#f0c070;border:1px solid rgba(224,162,60,.25)}
+.badge-navy{background:rgba(42,71,173,.25);color:#9fb6ff;border:1px solid rgba(42,71,173,.4)}
+.badge-ghost{background:rgba(255,255,255,.06);color:var(--text-2);border:1px solid var(--line)}
+
+/* ─── STICKY NAV ─── */
+.doc-nav{position:sticky;top:0;z-index:100;background:rgba(7,11,22,.88);backdrop-filter:blur(20px) saturate(1.4);-webkit-backdrop-filter:blur(20px) saturate(1.4);border-bottom:1px solid var(--line);display:flex;align-items:center;gap:0;padding:0 var(--sec-pad-h);height:60px}
+.doc-nav-brand{display:flex;align-items:center;gap:10px;margin-right:32px;flex-shrink:0}
+.doc-nav-brand img{height:26px;opacity:.9}
+.doc-nav-brand-text{display:flex;flex-direction:column;line-height:1}
+.doc-nav-brand-text span:first-child{font-family:var(--font-display);font-size:13px;font-weight:700;color:var(--text)}
+.doc-nav-brand-text span:last-child{font-family:var(--font-mono);font-size:8px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3);margin-top:2px}
+.doc-nav-links{display:flex;align-items:center;gap:2px;overflow-x:auto;scrollbar-width:none}
+.doc-nav-links::-webkit-scrollbar{display:none}
+.doc-nav-links a{font-family:var(--font-mono);font-size:10px;letter-spacing:.05em;color:var(--text-3);padding:6px 10px;border-radius:6px;transition:color .15s,background .15s;white-space:nowrap}
+.doc-nav-links a:hover{color:var(--text);background:rgba(255,255,255,.06)}
+
+/* ─── PITCH SVG ─── */
+.pitch-bg{position:absolute;inset:0;width:100%;height:100%;opacity:.5;pointer-events:none;z-index:0}
+
+/* ─── TIMELINE / ROADMAP ─── */
+.roadmap{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;margin-bottom:56px}
+.roadmap::before{content:'';position:absolute;top:36px;left:calc(12.5% + 8px);right:calc(12.5% + 8px);height:2px;background:linear-gradient(90deg,var(--green),var(--accent),var(--gold),var(--red));z-index:0}
+.phase{text-align:center;padding:0 20px;position:relative;z-index:1}
+.phase-dot{width:16px;height:16px;border-radius:50%;margin:28px auto 24px;position:relative;z-index:2}
+.phase-1 .phase-dot{background:var(--green);box-shadow:0 0 0 5px rgba(63,174,122,.2)}
+.phase-2 .phase-dot{background:var(--accent);box-shadow:0 0 0 5px rgba(91,130,255,.2)}
+.phase-3 .phase-dot{background:var(--gold);box-shadow:0 0 0 5px rgba(200,162,74,.2)}
+.phase-4 .phase-dot{background:var(--red);box-shadow:0 0 0 5px rgba(224,85,107,.2)}
+.phase-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:10px}
+.phase-1 .phase-label{color:var(--green)}
+.phase-2 .phase-label{color:var(--accent)}
+.phase-3 .phase-label{color:var(--gold)}
+.phase-4 .phase-label{color:var(--red)}
+.phase-title{font-family:var(--font-display);font-size:18px;font-weight:700;color:var(--text);margin-bottom:8px}
+.phase-items{list-style:none;text-align:left;font-size:13px;color:var(--text-2);display:flex;flex-direction:column;gap:6px}
+.phase-items li{display:flex;align-items:flex-start;gap:6px}
+.phase-items li::before{content:'→';font-family:var(--font-mono);font-size:11px;color:var(--text-3);flex-shrink:0;margin-top:2px}
+
+/* ─── CHECK LIST ─── */
+.check-list{list-style:none;display:flex;flex-direction:column;gap:9px}
+.check-list li{display:flex;align-items:flex-start;gap:8px;font-size:14px;color:var(--text-2)}
+.check-list li::before{content:'';display:block;width:16px;height:16px;border-radius:50%;background:rgba(63,174,122,.18);border:1px solid rgba(63,174,122,.3);flex-shrink:0;margin-top:2px;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath stroke='%233fae7a' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round' fill='none' d='M4 8.5l2.5 2.5 5-5'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:center}
+
+/* ─── ROLE CARD ─── */
+.role-avatar{width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:24px;margin:0 auto 14px;flex-shrink:0}
+.role-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--card-radius);padding:28px 24px;display:flex;flex-direction:column;align-items:center;text-align:center}
+.role-card .t-h4{margin-bottom:4px}
+.role-card .role-tag{font-family:var(--font-display);font-style:italic;font-size:14px;color:var(--gold-soft);margin-bottom:18px}
+.role-divider{width:100%;height:1px;background:var(--line);margin-bottom:18px}
+
+/* ─── STATS BAR ─── */
+.stats-bar{display:flex;align-items:center;border-top:1px solid var(--line-md)}
+.stats-bar-item{flex:1;padding:28px 24px;text-align:center}
+.stats-bar-item:not(:last-child){border-right:1px solid var(--line-md)}
+.stats-bar-item .stat-hero{display:block;margin-bottom:4px}
+.stats-bar-item .stat-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.12em;text-transform:uppercase;color:var(--text-3)}
+
+/* ─── KPI BLOCK ─── */
+.kpi-block{display:flex;flex-direction:column;gap:4px;padding:22px 24px;background:var(--surface-2);border:1px solid var(--line);border-radius:var(--card-radius-sm)}
+.kpi-label{font-family:var(--font-mono);font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3)}
+.kpi-value{font-family:var(--font-display);font-size:30px;font-weight:700;color:var(--text);letter-spacing:-.02em;line-height:1.1}
+.kpi-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:10px;font-size:18px}
+
+/* ─── FEATURE ROW ─── */
+.feature-row{display:flex;align-items:flex-start;gap:14px;padding:16px 0;border-bottom:1px solid var(--line)}
+.feature-row:last-child{border-bottom:none;padding-bottom:0}
+.feature-icon-box{width:40px;height:40px;border-radius:11px;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:18px}
+
+/* ─── MODULE CARD ─── */
+.module-card{background:var(--surface-2);border:1px solid var(--line);border-radius:var(--card-radius-sm);padding:22px 24px;display:flex;flex-direction:column;gap:10px}
+.module-num{font-family:var(--font-mono);font-size:11px;color:var(--text-3);letter-spacing:.1em}
+.module-icon{font-size:28px;margin-bottom:4px}
+
+/* ─── PILL GROUP ─── */
+.pill-group{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.pill{font-family:var(--font-mono);font-size:11px;letter-spacing:.04em;padding:5px 13px;border-radius:20px;background:var(--surface-3);border:1px solid var(--line);color:var(--text-2)}
+
+/* ─── LEAGUE GRID ─── */
+.league-grid{display:flex;flex-wrap:wrap;gap:10px}
+.league-tag{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:7px 16px;border-radius:8px;background:var(--surface-2);border:1px solid var(--line);color:var(--text-2)}
+
+/* ─── PRICING CARD ─── */
+.pricing-card{background:var(--surface);border:1px solid var(--line);border-radius:var(--card-radius);padding:32px 28px;display:flex;flex-direction:column;gap:0}
+.pricing-card.featured{border-color:rgba(91,130,255,.4);background:linear-gradient(160deg,rgba(91,130,255,.08),transparent 60%)}
+.pricing-card.enterprise{border-color:rgba(200,162,74,.3);background:linear-gradient(160deg,rgba(200,162,74,.06),transparent 60%)}
+.pricing-tier{font-family:var(--font-mono);font-size:10px;letter-spacing:.14em;text-transform:uppercase;margin-bottom:12px}
+.pricing-card.featured .pricing-tier{color:var(--accent-soft)}
+.pricing-card.enterprise .pricing-tier{color:var(--gold-soft)}
+.pricing-card:not(.featured):not(.enterprise) .pricing-tier{color:var(--text-3)}
+
+/* ─── DIFF TABLE ─── */
+.diff-row{display:flex;align-items:center;gap:12px;padding:13px 0;border-bottom:1px solid var(--line)}
+.diff-row:last-child{border-bottom:none}
+.diff-check{width:20px;height:20px;border-radius:50%;background:rgba(63,174,122,.18);border:1px solid rgba(63,174,122,.3);display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:10px;color:var(--green)}
+.diff-label{font-size:14px;color:var(--text-2);flex:1}
+.diff-tag{font-family:var(--font-mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--accent-soft)}
+
+/* ─── SECTION NUMBER ─── */
+.sec-num{position:absolute;bottom:40px;right:var(--sec-pad-h);font-family:var(--font-mono);font-size:11px;color:var(--text-3);letter-spacing:.1em;z-index:3}
+
+/* ─── CTA BUTTONS ─── */
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--accent);color:#fff;font-family:var(--font-body);font-size:15px;font-weight:600;padding:13px 30px;border-radius:30px;border:none;cursor:pointer;transition:opacity .15s,transform .15s}
+.btn-primary:hover{opacity:.9;transform:translateY(-1px)}
+.btn-ghost{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--text-2);font-family:var(--font-body);font-size:15px;font-weight:500;padding:12px 28px;border-radius:30px;border:1px solid rgba(255,255,255,.25);cursor:pointer;transition:border-color .15s,color .15s}
+.btn-ghost:hover{border-color:rgba(255,255,255,.5);color:var(--text)}
+
+/* ─── RESPONSIVE ─── */
+@media(max-width:1100px){
+  :root{--sec-pad-h:48px;--sec-pad-v:80px}
+  .grid-60-40,.grid-40-60{grid-template-columns:1fr;gap:40px}
+  .grid-4{grid-template-columns:repeat(2,1fr)}
+  .roadmap{grid-template-columns:repeat(2,1fr)}
+  .roadmap::before{display:none}
+}
+@media(max-width:768px){
+  :root{--sec-pad-h:24px;--sec-pad-v:64px}
+  .grid-3,.grid-2{grid-template-columns:1fr}
+  .grid-4{grid-template-columns:1fr}
+  .roadmap{grid-template-columns:1fr}
+  .doc-nav{padding:0 24px}
+  .stats-bar{flex-wrap:wrap}
+}
+
+/* ─── PRINT ─── */
+@media print{
+  .doc-nav{display:none}
+  .sec{page-break-before:always}
+  .orb,.pitch-bg{display:none}
+  *{backdrop-filter:none !important;-webkit-backdrop-filter:none !important}
+  @page{size:A4 landscape;margin:12mm 10mm}
+}
+</style>
+</head>
+<body>
+
+<!-- ─── STICKY NAV ─── -->
+<nav class="doc-nav">
+  <div class="doc-nav-brand">
+    <img src="assets/mark-white.png" alt="DD Sports Intelligence">
+    <div class="doc-nav-brand-text">
+      <span>DD Sports Intelligence</span>
+      <span>Pitch Deck</span>
+    </div>
+  </div>
+  <div class="doc-nav-links">
+    <a href="#s01">01 Cover</a>
+    <a href="#s02">02 Opportunity</a>
+    <a href="#s03">03 Problem</a>
+    <a href="#s04">04 Solution</a>
+    <a href="#s05">05 Vision</a>
+    <a href="#s06">06 Users</a>
+    <a href="#s07">07 Data Coverage</a>
+    <a href="#s08">08 Powered by Data</a>
+    <a href="#s09">09 Player Intel</a>
+    <a href="#s10">10 Benchmarking</a>
+    <a href="#s11">11 Scout Intel</a>
+    <a href="#s12">12 Recruitment</a>
+    <a href="#s13">13 Why DD</a>
+    <a href="#s14">14 Platform</a>
+    <a href="#s15">15 Business Model</a>
+    <a href="#s16">16 Roadmap</a>
+    <a href="#s17">17 Future</a>
+    <a href="#s18">18 Conclusion</a>
+  </div>
+</nav>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 01 — COVER -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s01" class="sec sec-cover" style="min-height:100vh;display:flex;flex-direction:column">
+
+  <!-- Football pitch SVG background -->
+  <svg class="pitch-bg" viewBox="0 0 800 600" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1" preserveAspectRatio="xMidYMid slice">
+    <rect x="60" y="40" width="680" height="520" rx="4"/>
+    <line x1="60" y1="300" x2="740" y2="300"/>
+    <circle cx="400" cy="300" r="80"/>
+    <circle cx="400" cy="300" r="3" fill="rgba(255,255,255,.07)" stroke="none"/>
+    <rect x="60" y="140" width="160" height="200"/>
+    <rect x="60" y="190" width="80" height="100"/>
+    <rect x="580" y="140" width="160" height="200"/>
+    <rect x="660" y="190" width="80" height="100"/>
+    <path d="M180,300 a120 120 0 0 1 0,0.1" fill="none"/>
+  </svg>
+
+  <!-- Soccer hero image overlay -->
+  <div style="position:absolute;inset:0;z-index:0;overflow:hidden">
+    <img src="assets/soccer-hero.jpg" alt="" style="width:100%;height:100%;object-fit:cover;opacity:.18;filter:saturate(0.6)">
+    <div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(3,13,58,.95) 0%,rgba(3,29,114,.7) 50%,rgba(2,16,63,.92) 100%)"></div>
+  </div>
+
+  <!-- Orbs -->
+  <div class="orb orb-blue" style="width:700px;height:700px;top:-250px;right:-200px;opacity:.35"></div>
+  <div class="orb orb-gold" style="width:360px;height:360px;bottom:60px;left:20px;opacity:.2"></div>
+
+  <!-- Hero content -->
+  <div class="sec-inner" style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:0">
+
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:72px">
+      <img src="assets/logo-white.png" alt="DD Sports Intelligence" style="height:60px;opacity:.95">
+      <span class="badge badge-gold" style="align-self:flex-start;margin-top:8px">Confidential · 2025</span>
+    </div>
+
+    <div>
+      <div class="eyebrow eyebrow-gold" style="margin-bottom:20px">Football Performance &amp; Talent Intelligence Platform</div>
+      <div class="t-display" style="margin-bottom:12px">DD Sports</div>
+      <div class="t-display" style="margin-bottom:32px"><em class="gold">Intelligence.</em></div>
+      <p style="font-size:19px;color:var(--text-2);max-width:600px;line-height:1.65;margin-bottom:48px">A next-generation football intelligence platform empowering players, scouts, clubs, and agents through data-driven performance insights.</p>
+      <div style="display:flex;gap:14px;flex-wrap:wrap">
+        <a href="#s04" class="btn-primary" style="font-size:14px;padding:11px 26px">Explore the Platform →</a>
+        <a href="#s18" class="btn-ghost" style="font-size:14px;padding:10px 24px">Skip to Conclusion</a>
+      </div>
+    </div>
+
+    <div style="margin-top:72px">
+      <div class="eyebrow" style="margin-bottom:16px">Discover. Develop. Perform.</div>
+      <div style="display:flex;gap:16px;flex-wrap:wrap">
+        <span class="badge badge-blue">Players</span>
+        <span class="badge badge-green">Scouts</span>
+        <span class="badge badge-gold">Clubs</span>
+        <span class="badge badge-navy">Agents</span>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Stats bar -->
+  <div class="stats-bar" style="position:relative;z-index:2">
+    <div class="stats-bar-item"><span class="stat-hero">14+</span><span class="stat-label">Leagues Covered</span></div>
+    <div class="stats-bar-item"><span class="stat-hero">30</span><span class="stat-label">Total Competitions</span></div>
+    <div class="stats-bar-item"><span class="stat-hero">4</span><span class="stat-label">User Types</span></div>
+    <div class="stats-bar-item"><span class="stat-hero">7</span><span class="stat-label">Core Modules</span></div>
+  </div>
+
+  <div class="sec-num">01 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 02 — THE OPPORTUNITY -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s02" class="sec sec-dark">
+  <div class="orb orb-blue" style="width:500px;height:500px;top:-100px;right:-100px;opacity:.18"></div>
+
+  <div class="sec-inner">
+    <div class="grid-60-40">
+
+      <div>
+        <span class="gold-rule"></span>
+        <div class="eyebrow" style="margin-bottom:14px">The Opportunity</div>
+        <h1 class="t-h1" style="margin-bottom:22px">Football has <em class="gold">evolved.</em></h1>
+        <p style="font-size:17px;margin-bottom:18px">Player recruitment, performance analysis, and talent discovery are no longer driven by instinct alone. The world's leading clubs, scouts, and agents now rely on data.</p>
+        <p style="font-size:16px;margin-bottom:36px;color:var(--text-3)">Yet access to actionable football intelligence remains <strong style="color:var(--text-2)">fragmented and inaccessible</strong> for many players, scouts, and clubs.</p>
+
+        <ul class="check-list">
+          <li>Identify talent earlier across emerging markets</li>
+          <li>Improve player performance with measurable benchmarks</li>
+          <li>Make smarter, faster recruitment decisions</li>
+          <li>Reduce transfer risk through objective data</li>
+          <li>Gain sustainable competitive advantage</li>
+        </ul>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="p-card-glass" style="text-align:center;padding:32px 24px">
+          <div style="font-family:var(--font-display);font-size:56px;font-weight:700;color:var(--gold-soft);letter-spacing:-.03em;line-height:1">€6.7B</div>
+          <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-top:6px">Global Football Data Market</div>
+        </div>
+        <div class="p-card-glass" style="text-align:center;padding:32px 24px">
+          <div style="font-family:var(--font-display);font-size:56px;font-weight:700;color:var(--accent-soft);letter-spacing:-.03em;line-height:1">82%</div>
+          <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-top:6px">Top Clubs Using Analytics</div>
+        </div>
+        <div class="p-card-glass" style="text-align:center;padding:32px 24px">
+          <div style="font-family:var(--font-display);font-size:56px;font-weight:700;color:var(--green);letter-spacing:-.03em;line-height:1">3×</div>
+          <div style="font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--text-3);margin-top:6px">Faster Talent Discovery</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="sec-num">02 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 03 — THE PROBLEM -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s03" class="sec sec-mid">
+  <div class="orb orb-gold" style="width:400px;height:400px;bottom:-80px;right:-80px;opacity:.12"></div>
+
+  <div class="sec-inner">
+    <div class="sec-header">
+      <span class="gold-rule"></span>
+      <div class="eyebrow" style="margin-bottom:14px">The Problem</div>
+      <h1 class="t-h1" style="margin-bottom:16px">Today, football stakeholders rely on <em class="gold">disconnected systems.</em></h1>
+      <p>Fragmented tools create blind spots that cost talent, money, and opportunity.</p>
+    </div>
+
+    <div class="grid-4">
+
+      <div class="p-card" style="border-color:rgba(91,130,255,.2)">
+        <div style="font-size:32px;margin-bottom:16px">⚽</div>
+        <div class="t-h4" style="margin-bottom:8px;color:var(--accent-soft)">Players</div>
+        <ul class="check-list" style="--check-color:#e0556b">
+          <li style="--check-color:red">Limited visibility into performance trends</li>
+          <li>No benchmarking against peers</li>
+          <li>Little insight into development opportunities</li>
+        </ul>
+      </div>
+
+      <div class="p-card" style="border-color:rgba(63,174,122,.2)">
+        <div style="font-size:32px;margin-bottom:16px">🔭</div>
+        <div class="t-h4" style="margin-bottom:8px;color:#6fd4a6">Scouts</div>
+        <ul class="check-list">
+          <li>Scattered, handwritten notes</li>
+          <li>Manual player tracking</li>
+          <li>Inconsistent reporting formats</li>
+        </ul>
+      </div>
+
+      <div class="p-card" style="border-color:rgba(200,162,74,.2)">
+        <div style="font-size:32px;margin-bottom:16px">🏟️</div>
+        <div class="t-h4" style="margin-bottom:8px;color:var(--gold-soft)">Clubs</div>
+        <ul class="check-list">
+          <li>Time-consuming recruitment processes</li>
+          <li>Limited access to emerging talent</li>
+          <li>Difficulty comparing prospects objectively</li>
+        </ul>
+      </div>
+
+      <div class="p-card" style="border-color:rgba(224,162,60,.2)">
+        <div style="font-size:32px;margin-bottom:16px">🤝</div>
+        <div class="t-h4" style="margin-bottom:8px;color:#f0c070">Agencies</div>
+        <ul class="check-list">
+          <li>Disconnected scouting operations</li>
+          <li>No centralized intelligence platform</li>
+          <li>Reactive rather than proactive decisions</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="p-card-glass" style="margin-top:32px;text-align:center;padding:24px 32px">
+      <p style="font-size:16px;color:var(--text-2)">The result: <strong style="color:var(--text)">missed talent, wasted budget, and lost competitive edge.</strong> The industry needs a unified intelligence layer.</p>
+    </div>
+
+  </div>
+  <div class="sec-num">03 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 04 — THE SOLUTION -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s04" class="sec sec-navy">
+  <div class="orb orb-blue" style="width:600px;height:600px;top:-180px;right:-160px;opacity:.3"></div>
+  <div class="orb orb-gold" style="width:280px;height:280px;bottom:40px;left:0;opacity:.18"></div>
+
+  <svg class="pitch-bg" viewBox="0 0 800 600" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1" preserveAspectRatio="xMidYMid slice">
+    <rect x="60" y="40" width="680" height="520" rx="4"/>
+    <line x1="60" y1="300" x2="740" y2="300"/>
+    <circle cx="400" cy="300" r="80"/>
+  </svg>
+
+  <div class="sec-inner" style="text-align:center">
+    <div class="eyebrow eyebrow-gold" style="margin-bottom:16px">The Solution</div>
+    <h1 class="t-h1" style="margin-bottom:20px">Introducing <em class="gold">DD Sports Intelligence.</em></h1>
+    <p style="font-size:18px;max-width:680px;margin:0 auto 56px;line-height:1.7">A centralized football intelligence ecosystem designed to transform how players develop, how scouts discover talent, and how clubs recruit — built on professional-grade data.</p>
+
+    <div class="grid-3" style="text-align:left;margin-bottom:40px">
+      <div class="p-card-glass p-card-sm">
+        <div style="font-size:28px;margin-bottom:12px">📊</div>
+        <div class="t-h4" style="margin-bottom:6px">Performance Analytics</div>
+        <p style="font-size:13px;color:var(--text-3)">Real-time match data, career statistics, and form analysis for every player in the system.</p>
+      </div>
+      <div class="p-card-glass p-card-sm">
+        <div style="font-size:28px;margin-bottom:12px">🎯</div>
+        <div class="t-h4" style="margin-bottom:6px">Player Benchmarking</div>
+        <p style="font-size:13px;color:var(--text-3)">Compare any player against league averages, position peers, and age group cohorts.</p>
+      </div>
+      <div class="p-card-glass p-card-sm">
+        <div style="font-size:28px;margin-bottom:12px">🔍</div>
+        <div class="t-h4" style="margin-bottom:6px">Talent Discovery</div>
+        <p style="font-size:13px;color:var(--text-3)">Search and surface emerging talent across 30 selected leagues with intelligent filters.</p>
+      </div>
+      <div class="p-card-glass p-card-sm">
+        <div style="font-size:28px;margin-bottom:12px">🏢</div>
+        <div class="t-h4" style="margin-bottom:6px">Recruitment Intelligence</div>
+        <p style="font-size:13px;color:var(--text-3)">Side-by-side player comparison and actionable recruitment pipeline tools for clubs.</p>
+      </div>
+      <div class="p-card-glass p-card-sm">
+        <div style="font-size:28px;margin-bottom:12px">🤝</div>
+        <div class="t-h4" style="margin-bottom:6px">Scout Collaboration</div>
+        <p style="font-size:13px;color:var(--text-3)">Shared watchlists, reports, and tracking tools connecting scouting teams in one workspace.</p>
+      </div>
+      <div class="p-card-glass p-card-sm">
+        <div style="font-size:28px;margin-bottom:12px">⚡</div>
+        <div class="t-h4" style="margin-bottom:6px">Single Platform</div>
+        <p style="font-size:13px;color:var(--text-3)">All modules unified into one digital ecosystem — no more fragmented tools and scattered data.</p>
+      </div>
+    </div>
+
+    <span class="badge badge-gold" style="font-size:11px;padding:6px 16px">One Platform. Complete Intelligence.</span>
+
+  </div>
+  <div class="sec-num">04 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 05 — OUR VISION -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s05" class="sec sec-dark" style="min-height:80vh;display:flex;flex-direction:column;justify-content:center">
+  <div class="orb orb-blue" style="width:500px;height:500px;top:-100px;left:-100px;opacity:.15"></div>
+  <div class="orb orb-gold" style="width:400px;height:400px;bottom:-80px;right:-60px;opacity:.12"></div>
+
+  <div class="sec-inner" style="text-align:center">
+    <span class="gold-rule" style="margin:0 auto 20px"></span>
+    <div class="eyebrow" style="margin-bottom:20px">Our Vision</div>
+    <h1 class="t-h1" style="margin-bottom:32px;max-width:800px;margin-left:auto;margin-right:auto">To become the <em class="gold">leading football intelligence platform</em> for emerging and professional talent.</h1>
+
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:32px;max-width:900px;margin:0 auto 56px;text-align:left">
+      <div>
+        <div style="width:3px;height:40px;background:linear-gradient(180deg,var(--accent),transparent);border-radius:2px;margin-bottom:16px"></div>
+        <p style="font-size:16px;line-height:1.65;color:var(--text-2)">We believe <strong style="color:var(--text)">every player</strong> deserves access to professional-level performance intelligence — regardless of where they play.</p>
+      </div>
+      <div>
+        <div style="width:3px;height:40px;background:linear-gradient(180deg,var(--gold),transparent);border-radius:2px;margin-bottom:16px"></div>
+        <p style="font-size:16px;line-height:1.65;color:var(--text-2)">We believe <strong style="color:var(--text)">every scout</strong> deserves better tools — modern, data-driven, and collaborative from anywhere.</p>
+      </div>
+      <div>
+        <div style="width:3px;height:40px;background:linear-gradient(180deg,var(--green),transparent);border-radius:2px;margin-bottom:16px"></div>
+        <p style="font-size:16px;line-height:1.65;color:var(--text-2)">We believe <strong style="color:var(--text)">every club</strong> deserves smarter recruitment decisions — built on objective data, not instinct alone.</p>
+      </div>
+    </div>
+
+    <div style="display:inline-flex;align-items:center;gap:24px;background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:100px;padding:16px 32px">
+      <span style="font-family:var(--font-display);font-style:italic;font-size:18px;color:var(--gold-soft)">Discover.</span>
+      <div style="width:4px;height:4px;border-radius:50%;background:var(--text-3)"></div>
+      <span style="font-family:var(--font-display);font-style:italic;font-size:18px;color:var(--accent-soft)">Develop.</span>
+      <div style="width:4px;height:4px;border-radius:50%;background:var(--text-3)"></div>
+      <span style="font-family:var(--font-display);font-style:italic;font-size:18px;color:var(--text)">Perform.</span>
+    </div>
+
+  </div>
+  <div class="sec-num">05 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 06 — TARGET USERS -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s06" class="sec sec-mid">
+
+  <div class="sec-inner">
+    <div class="sec-header" style="text-align:center">
+      <span class="gold-rule" style="margin:0 auto 20px"></span>
+      <div class="eyebrow" style="margin-bottom:14px">Target Users</div>
+      <h1 class="t-h1" style="margin-bottom:16px">Built for every <em class="gold">football stakeholder.</em></h1>
+      <p style="margin:0 auto">Four distinct user experiences, one unified intelligence platform.</p>
+    </div>
+
+    <div class="grid-4">
+
+      <div class="role-card">
+        <div class="role-avatar" style="background:linear-gradient(135deg,rgba(91,130,255,.3),rgba(91,130,255,.1));border:1px solid rgba(91,130,255,.3)">⚽</div>
+        <div class="t-h4">Professional Players</div>
+        <div class="role-tag">Own Your Data</div>
+        <div class="role-divider"></div>
+        <ul class="check-list" style="text-align:left;width:100%">
+          <li>Track personal performance</li>
+          <li>Benchmark against peers</li>
+          <li>Identify development opportunities</li>
+          <li>Premium career dashboards</li>
+        </ul>
+        <div style="margin-top:18px"><span class="badge badge-blue">Player Tier</span></div>
+      </div>
+
+      <div class="role-card">
+        <div class="role-avatar" style="background:linear-gradient(135deg,rgba(63,174,122,.3),rgba(63,174,122,.1));border:1px solid rgba(63,174,122,.3)">🔭</div>
+        <div class="t-h4">Scouts</div>
+        <div class="role-tag">Discover Talent</div>
+        <div class="role-divider"></div>
+        <ul class="check-list" style="text-align:left;width:100%">
+          <li>Discover emerging talent</li>
+          <li>Build tracked watchlists</li>
+          <li>Submit structured reports</li>
+          <li>Collaborative scouting tools</li>
+        </ul>
+        <div style="margin-top:18px"><span class="badge badge-green">Scout Tier</span></div>
+      </div>
+
+      <div class="role-card">
+        <div class="role-avatar" style="background:linear-gradient(135deg,rgba(200,162,74,.3),rgba(200,162,74,.1));border:1px solid rgba(200,162,74,.3)">🏟️</div>
+        <div class="t-h4">Clubs</div>
+        <div class="role-tag">Recruit Smarter</div>
+        <div class="role-divider"></div>
+        <ul class="check-list" style="text-align:left;width:100%">
+          <li>Identify prospects at scale</li>
+          <li>Compare players objectively</li>
+          <li>Data-driven recruitment</li>
+          <li>Club intelligence portal</li>
+        </ul>
+        <div style="margin-top:18px"><span class="badge badge-gold">Club Tier</span></div>
+      </div>
+
+      <div class="role-card">
+        <div class="role-avatar" style="background:linear-gradient(135deg,rgba(224,162,60,.3),rgba(224,162,60,.1));border:1px solid rgba(224,162,60,.3)">🤝</div>
+        <div class="t-h4">Agents</div>
+        <div class="role-tag">Monitor &amp; Grow</div>
+        <div class="role-divider"></div>
+        <ul class="check-list" style="text-align:left;width:100%">
+          <li>Monitor player performance</li>
+          <li>Track player progression</li>
+          <li>Identify opportunities</li>
+          <li>Enterprise custom solutions</li>
+        </ul>
+        <div style="margin-top:18px"><span class="badge badge-amber">Enterprise Tier</span></div>
+      </div>
+
+    </div>
+  </div>
+  <div class="sec-num">06 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 07 — DATA COVERAGE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s07" class="sec sec-dark">
+  <div class="orb orb-blue" style="width:500px;height:500px;top:-120px;right:-100px;opacity:.18"></div>
+
+  <div class="sec-inner">
+    <div class="grid-60-40">
+
+      <div>
+        <span class="gold-rule"></span>
+        <div class="eyebrow" style="margin-bottom:14px">Data Coverage</div>
+        <h1 class="t-h1" style="margin-bottom:20px">Powered by <em class="gold">professional data</em> across international markets.</h1>
+        <p style="font-size:16px;margin-bottom:36px">Coverage across selected top European and international football leagues, positioning DD Sports Intelligence at the heart of emerging talent identification.</p>
+
+        <div class="league-grid" style="margin-bottom:32px">
+          <span class="league-tag">🇪🇸 Spain</span>
+          <span class="league-tag">🇵🇹 Portugal</span>
+          <span class="league-tag">🇮🇹 Italy</span>
+          <span class="league-tag">🇩🇪 Germany</span>
+          <span class="league-tag">🇦🇹 Austria</span>
+          <span class="league-tag">🇩🇰 Denmark</span>
+          <span class="league-tag">🇧🇪 Belgium</span>
+          <span class="league-tag">🇳🇱 Netherlands</span>
+          <span class="league-tag">🇫🇷 France</span>
+          <span class="league-tag">🇸🇪 Sweden</span>
+          <span class="league-tag">🇬🇷 Greece</span>
+          <span class="league-tag">🇧🇬 Bulgaria</span>
+          <span class="league-tag">🇷🇺 Russia</span>
+          <span class="league-tag">🇱🇻 Latvia</span>
+        </div>
+
+        <div class="eyebrow" style="margin-bottom:12px">Including Elite Development Competitions</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge badge-blue">U18</span>
+          <span class="badge badge-green">U19</span>
+          <span class="badge badge-gold">U21</span>
+          <span class="badge badge-amber">U23</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="kpi-block">
+          <div class="kpi-icon" style="background:rgba(91,130,255,.15)">🌍</div>
+          <div class="kpi-label">Selected Leagues</div>
+          <div class="kpi-value" style="color:var(--accent-soft)">30</div>
+        </div>
+        <div class="kpi-block">
+          <div class="kpi-icon" style="background:rgba(200,162,74,.15)">🏆</div>
+          <div class="kpi-label">Countries Covered</div>
+          <div class="kpi-value" style="color:var(--gold-soft)">14+</div>
+        </div>
+        <div class="kpi-block">
+          <div class="kpi-icon" style="background:rgba(63,174,122,.15)">📈</div>
+          <div class="kpi-label">Development Age Groups</div>
+          <div class="kpi-value" style="color:var(--green)">4</div>
+        </div>
+        <div class="p-card-glass" style="padding:20px 24px">
+          <div class="eyebrow" style="margin-bottom:10px">Focus Market</div>
+          <p style="font-size:13px;color:var(--text-2);line-height:1.6">Europe &amp; international emerging talent — where the next generation of professional footballers are developed.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="sec-num">07 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 08 — POWERED BY DATA -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s08" class="sec sec-mid">
+  <div class="orb orb-gold" style="width:380px;height:380px;bottom:-60px;left:-60px;opacity:.12"></div>
+
+  <div class="sec-inner">
+    <div class="grid-40-60">
+
+      <div>
+        <span class="gold-rule"></span>
+        <div class="eyebrow" style="margin-bottom:14px">Data Infrastructure</div>
+        <h1 class="t-h1" style="margin-bottom:20px">Powered by <em class="gold">professional-grade</em> football intelligence.</h1>
+        <p style="font-size:16px;margin-bottom:28px">Professional-grade football intelligence powered through SportsMonks — one of the most comprehensive football data providers in the industry.</p>
+
+        <div class="p-card-glass" style="padding:24px 28px;margin-bottom:20px">
+          <div class="eyebrow" style="margin-bottom:12px">Data Partner</div>
+          <div style="font-family:var(--font-display);font-size:28px;font-weight:700;color:var(--text);margin-bottom:8px">SportsMonks</div>
+          <p style="font-size:13px;color:var(--text-3);line-height:1.6">Professional-tier football data API covering comprehensive match statistics, player metrics, and historical records.</p>
+        </div>
+
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="badge badge-blue">Real-Time Data</span>
+          <span class="badge badge-ghost">Historical Records</span>
+          <span class="badge badge-gold">Career Tracking</span>
+        </div>
+      </div>
+
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+        <div class="kpi-block">
+          <div class="kpi-icon" style="background:rgba(91,130,255,.12)">📋</div>
+          <div class="kpi-label">Match Statistics</div>
+          <p style="font-size:12px;color:var(--text-3);margin-top:4px">Full in-match data coverage</p>
+        </div>
+        <div class="kpi-block">
+          <div class="kpi-icon" style="background:rgba(63,174,122,.12)">👤</div>
+          <div class="kpi-label">Player Performance</div>
+          <p style="font-size:12px;color:var(--text-3);margin-top:4px">Individual metrics &amp; ratings</p>
+        </div>
+        <div class="kpi-block">
+          <div class="kpi-icon" style="background:rgba(200,162,74,.12)">🏆</div>
+          <div class="kpi-label">Team Performance</div>
+          <p style="font-size:12px;color:var(--text-3);margin-top:4px">Tactical &amp; squad analytics</p>
+        </div>
+        <div class="kpi-block">
+          <div class="kpi-icon" style="background:rgba(224,162,60,.12)">📅</div>
+          <div class="kpi-label">Fixtures &amp; Standings</div>
+          <p style="font-size:12px;color:var(--text-3);margin-top:4px">Live schedules &amp; tables</p>
+        </div>
+        <div class="kpi-block">
+          <div class="kpi-icon" style="background:rgba(91,130,255,.12)">📈</div>
+          <div class="kpi-label">Career History</div>
+          <p style="font-size:12px;color:var(--text-3);margin-top:4px">Full career progression</p>
+        </div>
+        <div class="kpi-block">
+          <div class="kpi-icon" style="background:rgba(63,174,122,.12)">🌐</div>
+          <div class="kpi-label">League Data</div>
+          <p style="font-size:12px;color:var(--text-3);margin-top:4px">30 selected competitions</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="sec-num">08 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 09 — PLAYER INTELLIGENCE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s09" class="sec sec-dark">
+  <div class="orb orb-blue" style="width:480px;height:480px;top:-120px;right:-80px;opacity:.16"></div>
+
+  <div class="sec-inner">
+    <div class="grid-40-60">
+
+      <div>
+        <span class="gold-rule"></span>
+        <div class="eyebrow" style="margin-bottom:14px">Player Intelligence</div>
+        <h1 class="t-h1" style="margin-bottom:20px">Every player. A <em class="gold">dynamic intelligence</em> profile.</h1>
+        <p style="font-size:16px;margin-bottom:28px">Each player in the system receives a comprehensive, real-time intelligence profile built from professional match data — tracking every aspect of their development and performance.</p>
+
+        <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px">
+          <span class="badge badge-blue">Live Data</span>
+          <span class="badge badge-gold">Career Tracking</span>
+          <span class="badge badge-green">Trend Analysis</span>
+        </div>
+
+        <div class="p-card-glass" style="padding:20px 24px">
+          <p style="font-size:13px;color:var(--text-2);line-height:1.65;font-style:italic">"From debut to peak — every player's journey captured in one intelligent profile."</p>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:0">
+        <div class="feature-row">
+          <div class="feature-icon-box" style="background:rgba(91,130,255,.12)">📊</div>
+          <div>
+            <div class="t-h4" style="margin-bottom:4px">Performance Overview</div>
+            <p style="font-size:13px;color:var(--text-3)">Season-level stats including goals, assists, minutes played, and match ratings at a glance.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon-box" style="background:rgba(200,162,74,.12)">⭐</div>
+          <div>
+            <div class="t-h4" style="margin-bottom:4px">Match Ratings</div>
+            <p style="font-size:13px;color:var(--text-3)">Per-game performance ratings sourced from professional football data providers.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon-box" style="background:rgba(63,174,122,.12)">🎯</div>
+          <div>
+            <div class="t-h4" style="margin-bottom:4px">Goals &amp; Assists Breakdown</div>
+            <p style="font-size:13px;color:var(--text-3)">Detailed attacking contribution tracking across all competitions in the current season.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon-box" style="background:rgba(91,130,255,.12)">📍</div>
+          <div>
+            <div class="t-h4" style="margin-bottom:4px">Position Analysis</div>
+            <p style="font-size:13px;color:var(--text-3)">Positional performance context — how the player compares within their specific role on the pitch.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon-box" style="background:rgba(224,162,60,.12)">📈</div>
+          <div>
+            <div class="t-h4" style="margin-bottom:4px">Performance Trends</div>
+            <p style="font-size:13px;color:var(--text-3)">Season-over-season progression tracking to identify improvement trajectories and development windows.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="sec-num">09 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 10 — PERFORMANCE BENCHMARKING -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s10" class="sec sec-mid">
+  <div class="orb orb-blue" style="width:420px;height:420px;bottom:-80px;right:-60px;opacity:.14"></div>
+
+  <div class="sec-inner">
+    <div class="grid-60-40">
+
+      <div>
+        <span class="gold-rule"></span>
+        <div class="eyebrow" style="margin-bottom:14px">Performance Benchmarking</div>
+        <h1 class="t-h1" style="margin-bottom:20px">Move beyond statistics. <em class="gold">Understand context.</em></h1>
+        <p style="font-size:17px;margin-bottom:32px">Raw numbers alone don't tell the story. DD Sports Intelligence gives every player the context they need to understand where they truly stand — and what it takes to reach the next level.</p>
+
+        <div style="display:flex;flex-direction:column;gap:16px;margin-bottom:32px">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px">
+            <div>
+              <div class="eyebrow" style="font-size:10px;margin-bottom:4px">Benchmark Type</div>
+              <div style="font-size:15px;font-weight:600;color:var(--text)">League Average</div>
+            </div>
+            <span class="badge badge-blue">Active</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px">
+            <div>
+              <div class="eyebrow" style="font-size:10px;margin-bottom:4px">Benchmark Type</div>
+              <div style="font-size:15px;font-weight:600;color:var(--text)">Position Average</div>
+            </div>
+            <span class="badge badge-green">Active</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px">
+            <div>
+              <div class="eyebrow" style="font-size:10px;margin-bottom:4px">Benchmark Type</div>
+              <div style="font-size:15px;font-weight:600;color:var(--text)">Age Group Peers</div>
+            </div>
+            <span class="badge badge-gold">Active</span>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:14px 20px;background:var(--surface-2);border:1px solid var(--line);border-radius:10px">
+            <div>
+              <div class="eyebrow" style="font-size:10px;margin-bottom:4px">Benchmark Type</div>
+              <div style="font-size:15px;font-weight:600;color:var(--text)">Top Performers</div>
+            </div>
+            <span class="badge badge-amber">Active</span>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:20px">
+        <div class="p-card-glass">
+          <div class="eyebrow" style="margin-bottom:12px">What Benchmarking Reveals</div>
+          <ul class="check-list">
+            <li>Genuine strengths vs. statistical illusions</li>
+            <li>Weaknesses requiring focused development</li>
+            <li>Growth opportunities relative to age group</li>
+            <li>Readiness for higher-level competition</li>
+          </ul>
+        </div>
+
+        <div class="p-card-glass p-card-gold" style="padding:24px 28px">
+          <div class="eyebrow eyebrow-gold" style="margin-bottom:10px">The Outcome</div>
+          <p style="font-size:14px;color:var(--text-2);line-height:1.65">Players and clubs receive <strong style="color:var(--text)">actionable intelligence</strong> — not just data — to make the right decisions at the right moment.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="sec-num">10 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 11 — SCOUT INTELLIGENCE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s11" class="sec sec-dark">
+  <div class="orb orb-green" style="width:440px;height:440px;top:-80px;left:-80px;opacity:.14"></div>
+
+  <div class="sec-inner">
+    <div class="grid-40-60">
+
+      <div>
+        <span class="gold-rule"></span>
+        <div class="eyebrow" style="margin-bottom:14px">Scout Intelligence</div>
+        <h1 class="t-h1" style="margin-bottom:20px">Built for <em class="gold">modern football</em> scouts.</h1>
+        <p style="font-size:16px;margin-bottom:28px">A dedicated workspace designed around how scouts actually work — combining data-driven discovery with intuitive collaboration tools.</p>
+        <div style="display:flex;flex-wrap:wrap;gap:8px">
+          <span class="badge badge-green">Discovery Tools</span>
+          <span class="badge badge-blue">Collaboration</span>
+          <span class="badge badge-gold">Report Builder</span>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:0">
+        <div class="feature-row">
+          <div class="feature-icon-box" style="background:rgba(63,174,122,.12)">📋</div>
+          <div>
+            <div class="t-h4" style="margin-bottom:4px">Smart Watchlists</div>
+            <p style="font-size:13px;color:var(--text-3)">Build and manage dynamic player watchlists organized by priority, position, league, or assignment — accessible from any device.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon-box" style="background:rgba(91,130,255,.12)">👁️</div>
+          <div>
+            <div class="t-h4" style="margin-bottom:4px">Player Tracking</div>
+            <p style="font-size:13px;color:var(--text-3)">Monitor specific players across a season — track performance trends and receive data updates automatically.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon-box" style="background:rgba(63,174,122,.12)">🔍</div>
+          <div>
+            <div class="t-h4" style="margin-bottom:4px">Talent Identification</div>
+            <p style="font-size:13px;color:var(--text-3)">Search across 30 leagues with advanced filters to uncover emerging talent before it reaches mainstream awareness.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon-box" style="background:rgba(200,162,74,.12)">📝</div>
+          <div>
+            <div class="t-h4" style="margin-bottom:4px">Recruitment Reports</div>
+            <p style="font-size:13px;color:var(--text-3)">Create and share structured scouting reports — standardized formats that clubs and agencies can act on immediately.</p>
+          </div>
+        </div>
+        <div class="feature-row">
+          <div class="feature-icon-box" style="background:rgba(91,130,255,.12)">📊</div>
+          <div>
+            <div class="t-h4" style="margin-bottom:4px">Performance Monitoring</div>
+            <p style="font-size:13px;color:var(--text-3)">Data-backed performance monitoring to complement live match observation with ongoing statistical context.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="sec-num">11 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 12 — RECRUITMENT INTELLIGENCE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s12" class="sec sec-mid">
+  <div class="orb orb-gold" style="width:400px;height:400px;top:-80px;right:-60px;opacity:.12"></div>
+
+  <div class="sec-inner">
+    <div class="grid-60-40">
+
+      <div>
+        <span class="gold-rule"></span>
+        <div class="eyebrow" style="margin-bottom:14px">Recruitment Intelligence</div>
+        <h1 class="t-h1" style="margin-bottom:20px">Helping clubs <em class="gold">recruit smarter.</em></h1>
+        <p style="font-size:17px;margin-bottom:32px">A powerful recruitment hub that enables clubs to search, filter, compare, and evaluate prospects using objective, data-driven intelligence — eliminating guesswork from the transfer process.</p>
+
+        <div class="eyebrow" style="margin-bottom:16px">Search &amp; Filter Players By</div>
+        <div class="pill-group" style="margin-top:0;margin-bottom:32px">
+          <span class="pill">Age Range</span>
+          <span class="pill">Position</span>
+          <span class="pill">Nationality</span>
+          <span class="pill">League</span>
+          <span class="pill">Goals Scored</span>
+          <span class="pill">Match Rating</span>
+          <span class="pill">Minutes Played</span>
+          <span class="pill">Assists</span>
+          <span class="pill">Market Value</span>
+        </div>
+
+        <ul class="check-list">
+          <li>Side-by-side player comparison across any metric</li>
+          <li>Identify recruitment opportunities with confidence</li>
+          <li>Build shortlists and share with decision-makers</li>
+          <li>Data-backed transfer risk assessment</li>
+        </ul>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="p-card-glass" style="padding:24px 28px">
+          <div class="eyebrow" style="margin-bottom:16px">Recruitment Workflow</div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:28px;height:28px;border-radius:50%;background:rgba(91,130,255,.2);border:1px solid rgba(91,130,255,.3);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--accent-soft);flex-shrink:0">1</div>
+              <span style="font-size:14px;color:var(--text-2)">Define position &amp; profile requirements</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:28px;height:28px;border-radius:50%;background:rgba(91,130,255,.2);border:1px solid rgba(91,130,255,.3);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--accent-soft);flex-shrink:0">2</div>
+              <span style="font-size:14px;color:var(--text-2)">Search &amp; filter across 30 leagues</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:28px;height:28px;border-radius:50%;background:rgba(91,130,255,.2);border:1px solid rgba(91,130,255,.3);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--accent-soft);flex-shrink:0">3</div>
+              <span style="font-size:14px;color:var(--text-2)">Compare shortlisted prospects objectively</span>
+            </div>
+            <div style="display:flex;align-items:center;gap:12px">
+              <div style="width:28px;height:28px;border-radius:50%;background:rgba(63,174,122,.2);border:1px solid rgba(63,174,122,.3);display:flex;align-items:center;justify-content:center;font-family:var(--font-mono);font-size:11px;color:var(--green);flex-shrink:0">4</div>
+              <span style="font-size:14px;color:var(--text-2)">Make confident recruitment decisions</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="kpi-block">
+          <div class="kpi-label">Outcome</div>
+          <div class="kpi-value" style="font-size:22px;color:var(--gold-soft)">Smarter Transfers</div>
+          <p style="font-size:12px;color:var(--text-3);margin-top:4px">Data-driven decisions reduce transfer risk and improve recruitment ROI.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="sec-num">12 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 13 — WHY DD SPORTS INTELLIGENCE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s13" class="sec sec-navy">
+  <div class="orb orb-blue" style="width:600px;height:600px;top:-200px;right:-180px;opacity:.25"></div>
+  <div class="orb orb-gold" style="width:320px;height:320px;bottom:0;left:-60px;opacity:.16"></div>
+
+  <svg class="pitch-bg" viewBox="0 0 800 600" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1" preserveAspectRatio="xMidYMid slice">
+    <rect x="60" y="40" width="680" height="520" rx="4"/>
+    <line x1="60" y1="300" x2="740" y2="300"/>
+    <circle cx="400" cy="300" r="80"/>
+  </svg>
+
+  <div class="sec-inner">
+    <div class="grid-40-60">
+
+      <div>
+        <span class="gold-rule"></span>
+        <div class="eyebrow" style="margin-bottom:14px">Why DD Sports Intelligence</div>
+        <h1 class="t-h1" style="margin-bottom:20px">Most platforms show data. <em class="gold">We deliver intelligence.</em></h1>
+        <p style="font-size:16px;margin-bottom:28px;line-height:1.7">There is no shortage of football data. The shortage is in platforms that transform that data into decisions. DD Sports Intelligence bridges the gap.</p>
+        <div class="p-card-glass" style="padding:20px 24px;margin-top:8px">
+          <p style="font-size:14px;color:var(--text-2);line-height:1.65;font-style:italic">"Not just statistics — real football intelligence that drives outcomes."</p>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <div class="diff-row">
+          <div class="diff-check">✓</div>
+          <div class="diff-label"><strong style="color:var(--text)">Emerging Talent Focus</strong> — built for markets others ignore</div>
+          <div class="diff-tag">Core</div>
+        </div>
+        <div class="diff-row">
+          <div class="diff-check">✓</div>
+          <div class="diff-label"><strong style="color:var(--text)">Development Pathways</strong> — track growth across time</div>
+          <div class="diff-tag">Core</div>
+        </div>
+        <div class="diff-row">
+          <div class="diff-check">✓</div>
+          <div class="diff-label"><strong style="color:var(--text)">Recruitment Insights</strong> — compare and decide with confidence</div>
+          <div class="diff-tag">Core</div>
+        </div>
+        <div class="diff-row">
+          <div class="diff-check">✓</div>
+          <div class="diff-label"><strong style="color:var(--text)">Performance Benchmarking</strong> — understand context, not just numbers</div>
+          <div class="diff-tag">Core</div>
+        </div>
+        <div class="diff-row">
+          <div class="diff-check">✓</div>
+          <div class="diff-label"><strong style="color:var(--text)">Actionable Decision Making</strong> — tools designed around outcomes</div>
+          <div class="diff-tag">Core</div>
+        </div>
+        <div class="diff-row" style="border-bottom:none">
+          <div class="diff-check">✓</div>
+          <div class="diff-label"><strong style="color:var(--text)">Multi-Stakeholder Platform</strong> — players, scouts, clubs, agents, one ecosystem</div>
+          <div class="diff-tag">Unique</div>
+        </div>
+
+        <div style="margin-top:16px;display:flex;gap:12px;flex-wrap:wrap">
+          <span class="badge badge-gold">Intelligence, not data</span>
+          <span class="badge badge-blue">Built for football</span>
+          <span class="badge badge-green">Results-driven</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="sec-num">13 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 14 — PLATFORM OVERVIEW -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s14" class="sec sec-dark">
+  <div class="orb orb-blue" style="width:500px;height:500px;top:-120px;right:-100px;opacity:.15"></div>
+
+  <div class="sec-inner">
+    <div class="sec-header" style="text-align:center">
+      <span class="gold-rule" style="margin:0 auto 20px"></span>
+      <div class="eyebrow" style="margin-bottom:14px">Platform Overview</div>
+      <h1 class="t-h1" style="margin-bottom:16px">Seven <em class="gold">core modules.</em> One unified platform.</h1>
+      <p style="margin:0 auto">Each module designed to serve a specific intelligence need — together forming a complete football intelligence ecosystem.</p>
+    </div>
+
+    <div class="grid-4" style="gap:16px">
+
+      <div class="module-card">
+        <div class="module-num">Module 01</div>
+        <div class="module-icon">👥</div>
+        <div class="t-h4">Player Database</div>
+        <p style="font-size:13px;color:var(--text-3);line-height:1.6">Comprehensive player profiles across 30 leagues — searchable, filterable, and always up to date.</p>
+        <span class="badge badge-blue" style="margin-top:auto">All Users</span>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">Module 02</div>
+        <div class="module-icon">📊</div>
+        <div class="t-h4">Performance Analytics</div>
+        <p style="font-size:13px;color:var(--text-3);line-height:1.6">Real-time and historical match data for every player — goals, assists, ratings, and minutes.</p>
+        <span class="badge badge-green" style="margin-top:auto">Players · Scouts</span>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">Module 03</div>
+        <div class="module-icon">🎯</div>
+        <div class="t-h4">Benchmarking Engine</div>
+        <p style="font-size:13px;color:var(--text-3);line-height:1.6">Multi-context benchmarking against league, position, age group, and elite-tier comparators.</p>
+        <span class="badge badge-gold" style="margin-top:auto">Players · Clubs</span>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">Module 04</div>
+        <div class="module-icon">🔭</div>
+        <div class="t-h4">Scout Workspace</div>
+        <p style="font-size:13px;color:var(--text-3);line-height:1.6">Dedicated scouting tools — watchlists, player tracking, structured reports, and team collaboration.</p>
+        <span class="badge badge-green" style="margin-top:auto">Scouts</span>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">Module 05</div>
+        <div class="module-icon">🏢</div>
+        <div class="t-h4">Recruitment Hub</div>
+        <p style="font-size:13px;color:var(--text-3);line-height:1.6">Advanced search, multi-player comparison, shortlisting, and data-driven transfer decision tools.</p>
+        <span class="badge badge-gold" style="margin-top:auto">Clubs · Agents</span>
+      </div>
+
+      <div class="module-card">
+        <div class="module-num">Module 06</div>
+        <div class="module-icon">🏆</div>
+        <div class="t-h4">Club Intelligence Portal</div>
+        <p style="font-size:13px;color:var(--text-3);line-height:1.6">Club-level oversight including squad intelligence, performance monitoring, and competitive analysis.</p>
+        <span class="badge badge-amber" style="margin-top:auto">Clubs</span>
+      </div>
+
+      <div class="module-card" style="border-color:rgba(200,162,74,.25);background:linear-gradient(135deg,rgba(200,162,74,.06),transparent 60%)">
+        <div class="module-num">Module 07</div>
+        <div class="module-icon">⚡</div>
+        <div class="t-h4">Premium Player Dashboards</div>
+        <p style="font-size:13px;color:var(--text-3);line-height:1.6">Elite personal dashboards for subscribed players — full career analytics, development insights, and benchmarking.</p>
+        <span class="badge badge-gold" style="margin-top:auto">Premium Players</span>
+      </div>
+
+      <div class="p-card-glass" style="display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;gap:12px;min-height:180px">
+        <div style="font-size:32px">🔮</div>
+        <div class="t-h4">Future Modules</div>
+        <p style="font-size:12px;color:var(--text-3)">AI Insights · Video Intelligence · Transfer Analytics</p>
+        <span class="badge badge-ghost">Coming Soon</span>
+      </div>
+
+    </div>
+  </div>
+  <div class="sec-num">14 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 15 — BUSINESS MODEL -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s15" class="sec sec-mid">
+  <div class="orb orb-gold" style="width:380px;height:380px;bottom:-60px;left:-40px;opacity:.12"></div>
+
+  <div class="sec-inner">
+    <div class="sec-header" style="text-align:center">
+      <span class="gold-rule" style="margin:0 auto 20px"></span>
+      <div class="eyebrow" style="margin-bottom:14px">Business Model</div>
+      <h1 class="t-h1" style="margin-bottom:16px">Tiered subscriptions for <em class="gold">every stakeholder.</em></h1>
+      <p style="margin:0 auto">A scalable subscription model designed to generate revenue across all four user segments — with enterprise opportunities for custom solutions.</p>
+    </div>
+
+    <div class="grid-4">
+
+      <div class="pricing-card">
+        <div class="pricing-tier">Player Subscription</div>
+        <div class="t-h3" style="margin-bottom:16px">Player Tier</div>
+        <p style="font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.6">Direct-to-player subscriptions giving professional and semi-professional players access to their own performance intelligence.</p>
+        <div style="border-top:1px solid var(--line);padding-top:18px;margin-top:auto">
+          <div class="eyebrow" style="margin-bottom:10px">Includes</div>
+          <ul class="check-list">
+            <li>Full performance analytics</li>
+            <li>Benchmarking engine</li>
+            <li>Development insights</li>
+            <li>Career tracking dashboard</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-tier">Club Subscription</div>
+        <div class="t-h3" style="margin-bottom:16px">Club Tier</div>
+        <p style="font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.6">Club and organization subscriptions providing full access to recruitment intelligence, talent discovery, and player comparison tools.</p>
+        <div style="border-top:1px solid rgba(91,130,255,.2);padding-top:18px;margin-top:auto">
+          <div class="eyebrow" style="margin-bottom:10px">Includes</div>
+          <ul class="check-list">
+            <li>Recruitment intelligence hub</li>
+            <li>Talent discovery across 30 leagues</li>
+            <li>Player comparison engine</li>
+            <li>Club intelligence portal</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-tier">Scout Subscription</div>
+        <div class="t-h3" style="margin-bottom:16px">Scout Tier</div>
+        <p style="font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.6">Individual and team subscriptions for professional scouts, giving access to the full suite of scouting and discovery tools.</p>
+        <div style="border-top:1px solid var(--line);padding-top:18px;margin-top:auto">
+          <div class="eyebrow" style="margin-bottom:10px">Includes</div>
+          <ul class="check-list">
+            <li>Dynamic watchlists</li>
+            <li>Structured report builder</li>
+            <li>Player tracking tools</li>
+            <li>Collaborative scout workspace</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="pricing-card enterprise">
+        <div class="pricing-tier">Enterprise</div>
+        <div class="t-h3" style="margin-bottom:16px">Agency &amp; Custom</div>
+        <p style="font-size:13px;color:var(--text-3);margin-bottom:20px;line-height:1.6">Tailored enterprise agreements for agencies, multi-club organizations, and partners requiring bespoke platform access and integrations.</p>
+        <div style="border-top:1px solid rgba(200,162,74,.2);padding-top:18px;margin-top:auto">
+          <div class="eyebrow" style="margin-bottom:10px">Includes</div>
+          <ul class="check-list">
+            <li>Custom platform configuration</li>
+            <li>Multi-user agency access</li>
+            <li>Dedicated account management</li>
+            <li>API integration opportunities</li>
+          </ul>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="sec-num">15 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 16 — DEVELOPMENT ROADMAP -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s16" class="sec sec-dark">
+  <div class="orb orb-blue" style="width:480px;height:480px;top:-100px;right:-80px;opacity:.15"></div>
+
+  <div class="sec-inner">
+    <div class="sec-header" style="text-align:center">
+      <span class="gold-rule" style="margin:0 auto 20px"></span>
+      <div class="eyebrow" style="margin-bottom:14px">Development Roadmap</div>
+      <h1 class="t-h1" style="margin-bottom:16px">Four phases to <em class="gold">full intelligence.</em></h1>
+      <p style="margin:0 auto">A structured development roadmap taking DD Sports Intelligence from MVP to full commercial platform with AI capabilities.</p>
+    </div>
+
+    <div class="roadmap">
+
+      <div class="phase phase-1">
+        <div class="phase-dot"></div>
+        <div class="phase-label">Phase 1</div>
+        <div class="phase-title">Foundation &amp; MVP</div>
+        <ul class="phase-items">
+          <li>Authentication &amp; user roles</li>
+          <li>Player profile system</li>
+          <li>Core performance analytics</li>
+          <li>Basic scout workspace</li>
+          <li>Data integration layer</li>
+        </ul>
+      </div>
+
+      <div class="phase phase-2">
+        <div class="phase-dot"></div>
+        <div class="phase-label">Phase 2</div>
+        <div class="phase-title">Intelligence Layer</div>
+        <ul class="phase-items">
+          <li>Benchmarking engine</li>
+          <li>Player comparison tools</li>
+          <li>Full recruitment hub</li>
+          <li>Advanced scout reports</li>
+          <li>Watchlist collaboration</li>
+        </ul>
+      </div>
+
+      <div class="phase phase-3">
+        <div class="phase-dot"></div>
+        <div class="phase-label">Phase 3</div>
+        <div class="phase-title">Commercial Launch</div>
+        <ul class="phase-items">
+          <li>Subscription management</li>
+          <li>Club intelligence portal</li>
+          <li>Premium player dashboards</li>
+          <li>Enterprise agreements</li>
+          <li>Full onboarding system</li>
+        </ul>
+      </div>
+
+      <div class="phase phase-4">
+        <div class="phase-dot"></div>
+        <div class="phase-label">Phase 4</div>
+        <div class="phase-title">Future Innovation</div>
+        <ul class="phase-items">
+          <li>AI-powered insights</li>
+          <li>Predictive analytics</li>
+          <li>Video intelligence</li>
+          <li>Transfer intelligence</li>
+          <li>Global talent discovery</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <div class="grid-4" style="gap:12px;margin-top:0">
+      <div style="padding:14px 16px;background:rgba(63,174,122,.08);border:1px solid rgba(63,174,122,.2);border-radius:10px;text-align:center">
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--green);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">Phase 1</div>
+        <div style="font-size:13px;color:var(--text-2)">Months 1–3</div>
+      </div>
+      <div style="padding:14px 16px;background:rgba(91,130,255,.08);border:1px solid rgba(91,130,255,.2);border-radius:10px;text-align:center">
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--accent-soft);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">Phase 2</div>
+        <div style="font-size:13px;color:var(--text-2)">Months 4–6</div>
+      </div>
+      <div style="padding:14px 16px;background:rgba(200,162,74,.08);border:1px solid rgba(200,162,74,.2);border-radius:10px;text-align:center">
+        <div style="font-family:var(--font-mono);font-size:10px;color:var(--gold-soft);letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">Phase 3</div>
+        <div style="font-size:13px;color:var(--text-2)">Months 7–10</div>
+      </div>
+      <div style="padding:14px 16px;background:rgba(224,85,107,.08);border:1px solid rgba(224,85,107,.2);border-radius:10px;text-align:center">
+        <div style="font-family:var(--font-mono);font-size:10px;color:#f08096;letter-spacing:.1em;text-transform:uppercase;margin-bottom:4px">Phase 4</div>
+        <div style="font-size:13px;color:var(--text-2)">Month 11+</div>
+      </div>
+    </div>
+
+  </div>
+  <div class="sec-num">16 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 17 — FUTURE OF FOOTBALL INTELLIGENCE -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s17" class="sec sec-navy">
+  <div class="orb orb-blue" style="width:560px;height:560px;top:-160px;right:-140px;opacity:.28"></div>
+  <div class="orb orb-gold" style="width:300px;height:300px;bottom:40px;left:0;opacity:.15"></div>
+
+  <svg class="pitch-bg" viewBox="0 0 800 600" fill="none" stroke="rgba(255,255,255,.04)" stroke-width="1" preserveAspectRatio="xMidYMid slice">
+    <rect x="60" y="40" width="680" height="520" rx="4"/>
+    <line x1="60" y1="300" x2="740" y2="300"/>
+    <circle cx="400" cy="300" r="80"/>
+  </svg>
+
+  <div class="sec-inner">
+    <div class="grid-60-40">
+
+      <div>
+        <span class="gold-rule"></span>
+        <div class="eyebrow" style="margin-bottom:14px">Future of Football Intelligence</div>
+        <h1 class="t-h1" style="margin-bottom:20px">The next frontier of <em class="gold">football technology.</em></h1>
+        <p style="font-size:16px;margin-bottom:36px;line-height:1.7">As the platform matures, DD Sports Intelligence will expand into advanced intelligence capabilities — transforming from a data platform into an AI-powered decision engine for football.</p>
+
+        <div style="display:flex;flex-direction:column;gap:16px">
+          <div style="display:flex;align-items:flex-start;gap:16px;padding:18px 20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px">
+            <div style="font-size:24px;flex-shrink:0">🤖</div>
+            <div>
+              <div class="t-h4" style="margin-bottom:4px">AI-Powered Player Analysis</div>
+              <p style="font-size:13px;color:var(--text-3)">Machine learning models that surface insights humans would miss — pattern recognition across millions of data points.</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:16px;padding:18px 20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px">
+            <div style="font-size:24px;flex-shrink:0">📡</div>
+            <div>
+              <div class="t-h4" style="margin-bottom:4px">Automated Scout Recommendations</div>
+              <p style="font-size:13px;color:var(--text-3)">AI-generated player recommendations based on club profile, tactical needs, and historical success patterns.</p>
+            </div>
+          </div>
+          <div style="display:flex;align-items:flex-start;gap:16px;padding:18px 20px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:12px">
+            <div style="font-size:24px;flex-shrink:0">🎬</div>
+            <div>
+              <div class="t-h4" style="margin-bottom:4px">Video Intelligence</div>
+              <p style="font-size:13px;color:var(--text-3)">Integrated video tagging and analysis linked directly to player performance metrics and scouting reports.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <div class="p-card-glass" style="padding:20px 24px">
+          <div class="eyebrow eyebrow-gold" style="margin-bottom:14px">Future Opportunities</div>
+          <ul class="check-list">
+            <li>Predictive performance analytics</li>
+            <li>Career development tracking</li>
+            <li>Transfer intelligence &amp; market value forecasting</li>
+            <li>Club performance dashboards</li>
+            <li>Global talent discovery network</li>
+            <li>Injury risk &amp; workload management</li>
+          </ul>
+        </div>
+
+        <div class="p-card-glass p-card-gold" style="padding:20px 24px;text-align:center">
+          <div style="font-size:32px;margin-bottom:12px">🌍</div>
+          <div class="t-h4" style="margin-bottom:8px">Global Expansion Vision</div>
+          <p style="font-size:13px;color:var(--text-3);line-height:1.6">Expanding coverage to South America, Africa, and Asia — building the world's most comprehensive football intelligence network.</p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="sec-num">17 / 18</div>
+</section>
+
+
+<!-- ══════════════════════════════════════════════════════ -->
+<!-- SLIDE 18 — CONCLUSION -->
+<!-- ══════════════════════════════════════════════════════ -->
+<section id="s18" class="sec sec-cover" style="min-height:100vh;display:flex;flex-direction:column">
+
+  <!-- Background hero image -->
+  <div style="position:absolute;inset:0;z-index:0;overflow:hidden">
+    <img src="assets/soccer-hero.jpg" alt="" style="width:100%;height:100%;object-fit:cover;opacity:.2;filter:saturate(0.5)">
+    <div style="position:absolute;inset:0;background:linear-gradient(160deg,rgba(3,13,58,.96) 0%,rgba(3,29,114,.75) 45%,rgba(2,16,63,.94) 100%)"></div>
+  </div>
+
+  <!-- Pitch SVG -->
+  <svg class="pitch-bg" viewBox="0 0 800 600" fill="none" stroke="rgba(255,255,255,.05)" stroke-width="1" preserveAspectRatio="xMidYMid slice">
+    <rect x="60" y="40" width="680" height="520" rx="4"/>
+    <line x1="60" y1="300" x2="740" y2="300"/>
+    <circle cx="400" cy="300" r="80"/>
+    <circle cx="400" cy="300" r="3" fill="rgba(255,255,255,.08)" stroke="none"/>
+    <rect x="60" y="140" width="160" height="200"/>
+    <rect x="580" y="140" width="160" height="200"/>
+  </svg>
+
+  <div class="orb orb-blue" style="width:600px;height:600px;top:-200px;right:-160px;opacity:.3"></div>
+  <div class="orb orb-gold" style="width:300px;height:300px;bottom:120px;left:40px;opacity:.18"></div>
+
+  <!-- Content -->
+  <div class="sec-inner" style="flex:1;display:flex;flex-direction:column;justify-content:center">
+
+    <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:80px">
+      <img src="assets/logo-white.png" alt="DD Sports Intelligence" style="height:56px;opacity:.95">
+      <span class="badge badge-ghost">18 / 18</span>
+    </div>
+
+    <div class="grid-60-40" style="align-items:center">
+      <div>
+        <span class="gold-rule"></span>
+        <div class="eyebrow" style="margin-bottom:18px">Conclusion</div>
+        <h1 class="t-h1" style="margin-bottom:24px">Football is becoming increasingly <em class="gold">data-driven.</em></h1>
+        <p style="font-size:17px;margin-bottom:20px;line-height:1.7">The organizations that leverage intelligence today will identify talent earlier, develop players faster, and recruit more effectively than those that rely on instinct alone.</p>
+        <p style="font-size:17px;margin-bottom:40px;line-height:1.7">DD Sports Intelligence is positioned to become a <strong style="color:var(--text)">powerful football intelligence ecosystem</strong> — connecting players, scouts, clubs, and opportunities through a single, intelligent platform.</p>
+
+        <div style="display:inline-flex;align-items:center;gap:20px;background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);border-radius:100px;padding:14px 28px;margin-bottom:40px">
+          <span style="font-family:var(--font-display);font-style:italic;font-size:20px;color:var(--gold-soft)">Discover.</span>
+          <div style="width:4px;height:4px;border-radius:50%;background:var(--text-3)"></div>
+          <span style="font-family:var(--font-display);font-style:italic;font-size:20px;color:var(--accent-soft)">Develop.</span>
+          <div style="width:4px;height:4px;border-radius:50%;background:var(--text-3)"></div>
+          <span style="font-family:var(--font-display);font-style:italic;font-size:20px;color:var(--text)">Perform.</span>
+        </div>
+
+        <div style="display:flex;gap:14px;flex-wrap:wrap">
+          <a href="#s01" class="btn-primary" style="font-size:14px;padding:11px 26px">Back to Start ↑</a>
+          <a href="#s04" class="btn-ghost" style="font-size:14px;padding:10px 24px">View the Solution</a>
+        </div>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:16px">
+        <div class="p-card-glass" style="padding:24px 28px">
+          <div class="eyebrow" style="margin-bottom:16px">Platform Summary</div>
+          <div style="display:flex;flex-direction:column;gap:0">
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)">
+              <span style="font-size:13px;color:var(--text-2)">Core Modules</span>
+              <span style="font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--text)">7</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)">
+              <span style="font-size:13px;color:var(--text-2)">Leagues Covered</span>
+              <span style="font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--gold-soft)">30</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)">
+              <span style="font-size:13px;color:var(--text-2)">User Segments</span>
+              <span style="font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--accent-soft)">4</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)">
+              <span style="font-size:13px;color:var(--text-2)">Development Phases</span>
+              <span style="font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--green)">4</span>
+            </div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:12px 0">
+              <span style="font-size:13px;color:var(--text-2)">Revenue Tiers</span>
+              <span style="font-family:var(--font-display);font-size:24px;font-weight:700;color:var(--text)">4</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="p-card-glass p-card-gold" style="padding:20px 24px;text-align:center">
+          <p style="font-size:13px;color:var(--text-2);line-height:1.65;margin-bottom:14px">Ready to explore how DD Sports Intelligence can transform your football operations?</p>
+          <span class="badge badge-gold">Get in Touch</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- Footer bar -->
+  <div style="position:relative;z-index:2;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;justify-content:space-between;padding:18px var(--sec-pad-h)">
+    <div style="display:flex;align-items:center;gap:10px">
+      <img src="assets/mark-white.png" alt="" style="height:20px;opacity:.5">
+      <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-3);letter-spacing:.08em">DD SPORTS INTELLIGENCE</span>
+    </div>
+    <div style="display:flex;gap:16px">
+      <span class="badge badge-blue">Players</span>
+      <span class="badge badge-green">Scouts</span>
+      <span class="badge badge-gold">Clubs</span>
+      <span class="badge badge-navy">Agents</span>
+    </div>
+    <span style="font-family:var(--font-mono);font-size:10px;color:var(--text-3)">Confidential · 2025</span>
+  </div>
+
+</section>
+
+</body>
+</html>

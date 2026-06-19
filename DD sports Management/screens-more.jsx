@@ -344,10 +344,16 @@ function Notifications() {
 }
 
 // =================== MANAGED ROSTER ===================
-function ManagedRoster() {
+function ManagedRoster({ onOpenPlayer }) {
   const managed = window.DD.PLAYERS.filter(p => p.agent && p.agent !== "—");
   const agentName = managed[0]?.agent || "Donte Dorlly";
   const totalMV = managed.reduce((s, p) => s + p.mvNum, 0).toFixed(1);
+
+  const pill = (status) => {
+    const t = { "Active": "green", "Contract Risk": "red", "Prospect": "gold" }[status] || "accent";
+    return { padding: "3px 10px", borderRadius: 999, fontSize: 11, fontWeight: 600, whiteSpace: "nowrap",
+      background: `color-mix(in srgb,var(--${t}) 14%,transparent)`, color: `var(--${t})` };
+  };
 
   return (
     <div className="fade-in">
@@ -358,15 +364,32 @@ function ManagedRoster() {
         </div>
       </div>
 
-      <div className="card" style={{ padding: "24px 28px", maxWidth: 420, display: "flex", alignItems: "center", gap: 18 }}>
-        <Avatar name={agentName} color="#1f3aa6" size={52} />
-        <div>
-          <div style={{ fontWeight: 700, fontSize: 17 }}>{agentName}</div>
-          <div className="dim" style={{ fontSize: 13.5, marginTop: 5 }}>
-            {managed.length} clients · €{totalMV}M portfolio
+      <SectionCard title={agentName} sub={managed.length + " clients · €" + totalMV + "M portfolio"}>
+        {managed.map((p, i) => (
+          <div key={p.id}
+            onClick={() => onOpenPlayer && onOpenPlayer(p.id)}
+            onMouseEnter={e => e.currentTarget.style.background = "var(--surface-2)"}
+            onMouseLeave={e  => e.currentTarget.style.background = ""}
+            style={{ display: "flex", alignItems: "center", gap: 14, padding: "11px 6px", cursor: "pointer",
+              borderBottom: i < managed.length - 1 ? "1px solid var(--line)" : "none", borderRadius: 8 }}>
+            <Avatar name={p.name} color={p.avColor} size={42} />
+            <div style={{ flex: 1, minWidth: 0 }}>
+              <div style={{ fontWeight: 600, fontSize: 14 }}>{p.flag} {p.name} <PosTag pos={p.pos} /></div>
+              <div className="dim" style={{ fontSize: 12, marginTop: 2 }}>{p.posFull} · {p.club}{p.league ? " · " + p.league : ""}</div>
+            </div>
+            <div style={{ textAlign: "right", minWidth: 72 }}>
+              <div style={{ fontWeight: 700, fontSize: 14, color: "var(--text-1)" }}>{p.mv !== "—" ? p.mv : "Free Agent"}</div>
+              <div className="dim" style={{ fontSize: 11 }}>Market Value</div>
+            </div>
+            <div style={{ textAlign: "center", minWidth: 52 }}>
+              <div style={{ fontWeight: 700, fontSize: 14 }}>{p.rating}</div>
+              <div className="dim" style={{ fontSize: 11 }}>Rating</div>
+            </div>
+            <span style={pill(p.status)}>{p.status}</span>
+            <Icon name="chevron-right" size={14} style={{ color: "var(--text-3)", flex: "none" }} />
           </div>
-        </div>
-      </div>
+        ))}
+      </SectionCard>
     </div>
   );
 }

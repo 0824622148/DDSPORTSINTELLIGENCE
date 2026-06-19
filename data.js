@@ -12,15 +12,15 @@
 
   const NATIONS = {
     "Argentina":"🇦🇷","Austria":"🇦🇹","Belgium":"🇧🇪","Brazil":"🇧🇷","Bulgaria":"🇧🇬",
-    "Cameroon":"🇨🇲","Chile":"🇨🇱","Colombia":"🇨🇴","Croatia":"🇭🇷","Czech Republic":"🇨🇿",
-    "Denmark":"🇩🇰","Ecuador":"🇪🇨","England":"🇬🇧","Finland":"🇫🇮","France":"🇫🇷",
+    "Botswana":"🇧🇼","Cameroon":"🇨🇲","Chile":"🇨🇱","Colombia":"🇨🇴","Croatia":"🇭🇷","Czech Republic":"🇨🇿",
+    "Denmark":"🇩🇰","DR Congo":"🇨🇩","Ecuador":"🇪🇨","England":"🇬🇧","Finland":"🇫🇮","France":"🇫🇷",
     "Germany":"🇩🇪","Ghana":"🇬🇭","Greece":"🇬🇷","Hungary":"🇭🇺","Ireland":"🇮🇪",
     "Italy":"🇮🇹","Ivory Coast":"🇨🇮","Japan":"🇯🇵","Latvia":"🇱🇻","Mexico":"🇲🇽",
-    "Morocco":"🇲🇦","Netherlands":"🇳🇱","Nigeria":"🇳🇬","Norway":"🇳🇴","Paraguay":"🇵🇾",
+    "Mali":"🇲🇱","Morocco":"🇲🇦","Namibia":"🇳🇦","Netherlands":"🇳🇱","Nigeria":"🇳🇬","Norway":"🇳🇴","Paraguay":"🇵🇾",
     "Poland":"🇵🇱","Portugal":"🇵🇹","Romania":"🇷🇴","Russia":"🇷🇺","Scotland":"🏴󠁧󠁢󠁳󠁣󠁴󠁿",
     "Senegal":"🇸🇳","Serbia":"🇷🇸","Slovakia":"🇸🇰","Spain":"🇪🇸","Sweden":"🇸🇪",
-    "Switzerland":"🇨🇭","Tunisia":"🇹🇳","Turkey":"🇹🇷","Ukraine":"🇺🇦","Uruguay":"🇺🇾",
-    "Wales":"🏴󠁧󠁢󠁷󠁬󠁳󠁿",
+    "South Africa":"🇿🇦","Switzerland":"🇨🇭","Tunisia":"🇹🇳","Turkey":"🇹🇷","Ukraine":"🇺🇦","Uruguay":"🇺🇾",
+    "Wales":"🏴󠁧󠁢󠁷󠁬󠁳󠁿","Zambia":"🇿🇲",
   };
 
   const AVCOL = ["#1f3aa6","#2a6f5a","#7a3b8f","#b8742a","#1d6f8f","#9a3550","#4a4f8f","#2f7a44"];
@@ -53,6 +53,13 @@
     { id:"ger-u19", name:"Germany U19",                  country:"Germany",      tier:"development"  },
     { id:"rou-u19", name:"Romania U19",                  country:"Romania",      tier:"development"  },
     { id:"sui-u19", name:"Switzerland U19 Elite",        country:"Switzerland",  tier:"development"  },
+    { id:"rsa1",    name:"South Africa PSL",             country:"South Africa", tier:"professional" },
+    { id:"gha1",    name:"Ghana Premier League",         country:"Ghana",        tier:"professional" },
+    { id:"nga1",    name:"Nigeria Premier League",       country:"Nigeria",      tier:"professional" },
+    { id:"bwa1",    name:"Botswana Premier League",      country:"Botswana",     tier:"professional" },
+    { id:"nam1",    name:"Namibia Premier League",       country:"Namibia",      tier:"professional" },
+    { id:"zmb1",    name:"Zambia Super League",          country:"Zambia",       tier:"professional" },
+    { id:"isr1",    name:"Israel Premier League",        country:"Israel",       tier:"professional" },
   ];
 
   // ---- Position-specific stats generator ----
@@ -248,6 +255,24 @@
     P({name:"Luca Schneider",  pos:"FW", posFull:"Striker",      age:18, nation:"Germany",    club:"Bayern U19",        leagueId:"ger-u19", mv:"€4.0M",  mvNum:4,    expiry:"2026-06", status:"Prospect", agent:"—", rating:6.9, apps:20, goals:12, assists:3,  passAcc:76, mins:1580, height:"1.86m", foot:"Right", tier:"prospect",form:2.0}),
     P({name:"Andrei Ionescu",  pos:"FW", posFull:"Winger",       age:18, nation:"Romania",    club:"Steaua B U19",      leagueId:"rou-u19", mv:"€2.5M",  mvNum:2.5,  expiry:"2026-06", status:"Prospect", agent:"—", rating:6.7, apps:17, goals:6,  assists:5,  passAcc:77, mins:1260, height:"1.78m", foot:"Right", tier:"prospect",form:1.8}),
     P({name:"Noah Keller",     pos:"MF", posFull:"Central Mid",  age:18, nation:"Switzerland",club:"Basel U19",         leagueId:"sui-u19", mv:"€3.0M",  mvNum:3,    expiry:"2026-06", status:"Prospect", agent:"—", rating:6.8, apps:18, goals:3,  assists:6,  passAcc:83, mins:1380, height:"1.77m", foot:"Right", tier:"prospect",form:1.6}),
+
+    // ---- DD Sports Management — Real Client Roster ----
+    P({name:"Cheick Oumar Konaté", pos:"DF", posFull:"Centre-Back",  age:25, nation:"Mali",         club:"A.E. Kifisia",      leagueId:"gre2",  mv:"€1.2M", mvNum:1.2,  expiry:"2026-06", status:"Active",        agent:"D. Duarte",   rating:7.0, apps:24, goals:1,  assists:1,  passAcc:85, mins:2100, height:"1.88m", foot:"Right", tier:"squad",   form:0.6}),
+    P({name:"Khuliso Mudau",       pos:"DF", posFull:"Right-Back",    age:27, nation:"South Africa", club:"Mamelodi Sundowns", leagueId:"rsa1",  mv:"€1.8M", mvNum:1.8,  expiry:"2026-12", status:"Active",        agent:"D. Duarte",   rating:7.2, apps:28, goals:2,  assists:6,  passAcc:84, mins:2380, height:"1.79m", foot:"Right", tier:"key",     form:0.8}),
+    P({name:"Bongani Zungu",       pos:"MF", posFull:"Central Mid",   age:31, nation:"South Africa", club:"Amazulu F.C",       leagueId:"rsa1",  mv:"€1.5M", mvNum:1.5,  expiry:"2025-12", status:"Contract Risk", agent:"D. Duarte",   rating:7.3, apps:29, goals:4,  assists:8,  passAcc:87, mins:2510, height:"1.78m", foot:"Right", tier:"key",     form:0.6}),
+    P({name:"Bathusi Aubaas",      pos:"MF", posFull:"Central Mid",   age:25, nation:"Botswana",    club:"Mamelodi Sundowns", leagueId:"rsa1",  mv:"€1.2M", mvNum:1.2,  expiry:"2027-06", status:"Active",        agent:"D. Duarte",   rating:7.1, apps:26, goals:4,  assists:9,  passAcc:85, mins:2200, height:"1.77m", foot:"Right", tier:"key",     form:0.9}),
+    P({name:"Ndima Nkomokazi",     pos:"FW", posFull:"Forward",       age:24, nation:"South Africa", club:"Jomo Cosmos",       leagueId:"rsa1",  mv:"€0.5M", mvNum:0.5,  expiry:"2026-06", status:"Active",        agent:"D. Duarte",   rating:6.9, apps:22, goals:9,  assists:3,  passAcc:78, mins:1850, height:"1.80m", foot:"Right", tier:"squad",   form:1.1}),
+    P({name:"Chukwuemeka Obioma",  pos:"FW", posFull:"Striker",       age:23, nation:"Nigeria",      club:"Abia Warriors F.C", leagueId:"nga1",  mv:"€0.5M", mvNum:0.5,  expiry:"2026-06", status:"Active",        agent:"D. Duarte",   rating:7.0, apps:24, goals:12, assists:4,  passAcc:76, mins:2020, height:"1.86m", foot:"Right", tier:"squad",   form:1.2}),
+    P({name:"Lyema Dopolo",        pos:"DF", posFull:"Defender",      age:21, nation:"South Africa", club:"Ongoes F.C",        leagueId:"nam1",  mv:"€0.4M", mvNum:0.4,  expiry:"2026-06", status:"Prospect",      agent:"S. Marín",    rating:6.8, apps:20, goals:1,  assists:2,  passAcc:83, mins:1720, height:"1.82m", foot:"Right", tier:"prospect",form:1.5}),
+    P({name:"Ibrahim Buhari",      pos:"DF", posFull:"Centre-Back",   age:24, nation:"Ghana",        club:"IF Elfsborg",       leagueId:"swe1",  mv:"€2.5M", mvNum:2.5,  expiry:"2027-06", status:"Active",        agent:"S. Marín",    rating:7.1, apps:22, goals:2,  assists:1,  passAcc:87, mins:1880, height:"1.91m", foot:"Right", tier:"key",     form:0.7}),
+    P({name:"Sana Gomes",          pos:"DF", posFull:"Defender",      age:23, nation:"Senegal",      club:"Hapoel Haifa",      leagueId:"isr1",  mv:"€1.0M", mvNum:1.0,  expiry:"2026-06", status:"Active",        agent:"S. Marín",    rating:6.9, apps:21, goals:1,  assists:2,  passAcc:84, mins:1800, height:"1.84m", foot:"Left",  tier:"squad",   form:0.5}),
+    P({name:"Jacob Everson",       pos:"MF", posFull:"Central Mid",   age:23, nation:"Botswana",    club:"Jwaneng Galaxy F.C",leagueId:"bwa1",  mv:"€0.3M", mvNum:0.3,  expiry:"2026-06", status:"Prospect",      agent:"S. Marín",    rating:6.8, apps:20, goals:3,  assists:5,  passAcc:80, mins:1720, height:"1.80m", foot:"Right", tier:"prospect",form:1.6}),
+    P({name:"Mashiku Hans Muyeka", pos:"FW", posFull:"Forward",       age:24, nation:"Zambia",       club:"Mighty Gunners FC", leagueId:"zmb1",  mv:"€0.4M", mvNum:0.4,  expiry:"2026-06", status:"Active",        agent:"S. Marín",    rating:6.9, apps:22, goals:10, assists:3,  passAcc:77, mins:1880, height:"1.81m", foot:"Right", tier:"squad",   form:1.0}),
+    P({name:"Derrick Owusu",       pos:"MF", posFull:"Midfielder",    age:22, nation:"Ghana",        club:"Accra Lions",       leagueId:"gha1",  mv:"€0.6M", mvNum:0.6,  expiry:"2026-06", status:"Prospect",      agent:"L. Ferreira", rating:6.9, apps:23, goals:5,  assists:7,  passAcc:82, mins:1980, height:"1.76m", foot:"Right", tier:"prospect",form:1.8}),
+    P({name:"Marcelino Abrahams",  pos:"FW", posFull:"Winger",        age:27, nation:"South Africa", club:"Free Agent",        leagueId:"",      mv:"—",     mvNum:0,    expiry:"—",       status:"Active",        agent:"L. Ferreira", rating:7.0, apps:0,  goals:0,  assists:0,  passAcc:79, mins:0,    height:"1.73m", foot:"Right", tier:"squad",   form:0.8}),
+    P({name:"Lindokuhle Zungu",    pos:"FW", posFull:"Winger",        age:20, nation:"South Africa", club:"Houtbay F.C",       leagueId:"rsa1",  mv:"€0.3M", mvNum:0.3,  expiry:"2026-06", status:"Prospect",      agent:"L. Ferreira", rating:6.8, apps:19, goals:7,  assists:4,  passAcc:80, mins:1620, height:"1.75m", foot:"Left",  tier:"prospect",form:2.0}),
+    P({name:"Laudry Mukaba",       pos:"FW", posFull:"Winger",        age:22, nation:"DR Congo",     club:"African Stars F.C", leagueId:"nam1",  mv:"€0.4M", mvNum:0.4,  expiry:"2026-06", status:"Active",        agent:"L. Ferreira", rating:6.9, apps:21, goals:8,  assists:5,  passAcc:79, mins:1780, height:"1.72m", foot:"Right", tier:"squad",   form:1.3}),
+    P({name:"Luke Daniels",        pos:"FW", posFull:"Striker",       age:21, nation:"South Africa", club:"AmaTuks F.C",       leagueId:"rsa1",  mv:"€0.3M", mvNum:0.3,  expiry:"2026-06", status:"Prospect",      agent:"L. Ferreira", rating:6.8, apps:18, goals:7,  assists:3,  passAcc:77, mins:1440, height:"1.83m", foot:"Right", tier:"prospect",form:2.2}),
   ];
 
   // ---- Recruitment targets ----
@@ -284,9 +309,9 @@
   ];
 
   const AGENTS = [
-    {name:"David Duarte",  role:"Founder & Lead Agent",  players:7, value:"€172M", av:"#1f3aa6", initials:"DD"},
-    {name:"Sofía Marín",   role:"Senior Agent",           players:6, value:"€96M",  av:"#9a3550", initials:"SM"},
-    {name:"Lucas Ferreira",role:"Agent — Talent ID",      players:5, value:"€68M",  av:"#2f7a44", initials:"LF"},
+    {name:"David Duarte",  role:"Founder & Lead Agent",  players:13, value:"€179M", av:"#1f3aa6", initials:"DD"},
+    {name:"Sofía Marín",   role:"Senior Agent",           players:11, value:"€101M", av:"#9a3550", initials:"SM"},
+    {name:"Lucas Ferreira",role:"Agent — Talent ID",      players:10, value:"€70M",  av:"#2f7a44", initials:"LF"},
   ];
 
   const ACTIVITY = [

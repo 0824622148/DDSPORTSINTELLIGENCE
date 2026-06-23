@@ -98,6 +98,219 @@
     return {};
   }
 
+  // ---- Extended stats generator (defending / possession / attacking) ----
+  function extStats(pos, rating, apps, seed) {
+    const s = seed || 1;
+    const rnd = (n) => Math.abs((Math.sin(s * 97 + n * 251) % 1));
+    const r = rating, a = Math.max(1, apps);
+    const accPasses = Math.round((r * 5.2 + rnd(1) * 20 + 40) * (a / 28));
+    const totalShots = pos === "FW" ? Math.round((r * 2.1 + rnd(16) * 6) * (a / 28))
+      : pos === "MF" ? Math.round((r * 0.8 + rnd(16) * 3) * (a / 28))
+      : Math.round((r * 0.22 + rnd(16) * 2) * (a / 28));
+    const shotsOT = Math.max(1, Math.round(totalShots * (0.38 + rnd(17) * 0.18)));
+    return {
+      defending: {
+        duelsWon:       Math.max(5,  Math.round((r * 3.1 + rnd(3)  * 5)  * (a / 28))),
+        aerialDuelsWon: Math.max(2,  Math.round((r * (pos === "DF" || pos === "GK" ? 2.1 : 0.7) + rnd(4) * 3) * (a / 28))),
+        groundDuelsWon: Math.max(3,  Math.round((r * 2.2 + rnd(5)  * 4)  * (a / 28))),
+        tacklesWon:     Math.max(2,  Math.round((r * (pos === "DF" ? 2.0 : pos === "MF" ? 1.1 : 0.5) + rnd(6) * 3) * (a / 28))),
+        dribblesPassed: Math.max(1,  Math.round((r * (pos === "FW" ? 2.0 : 1.3) + rnd(7) * 4) * (a / 28))),
+        foulsCommitted: Math.max(2,  Math.round((r * 0.4 + rnd(8)  * 0.5 + 3)  * (a / 28))),
+        interceptions:  Math.max(2,  Math.round((r * (pos === "DF" ? 1.7 : pos === "MF" ? 1.0 : 0.4) + rnd(9) * 3) * (a / 28))),
+        clearances:     Math.max(0,  Math.round((r * (pos === "DF" ? 3.2 : pos === "GK" ? 0.8 : 0.2) + rnd(10) * 5) * (a / 28))),
+        recoveries:     Math.max(5,  Math.round((r * 1.8 + rnd(11) * 6)  * (a / 28))),
+      },
+      possession: {
+        accuratePasses:       accPasses,
+        accuratePassesFinal3: Math.round(accPasses * (0.16 + rnd(12) * 0.10)),
+        accurateLongPasses:   Math.round(accPasses * (0.10 + rnd(13) * 0.08)),
+        touches:        Math.max(30, Math.round((r * 7 + rnd(2) * 15 + 20) * (a / 28))),
+        progressiveCarries: Math.max(3, Math.round((r * (pos === "FW" || pos === "MF" ? 1.6 : 0.6) + rnd(14) * 4) * (a / 28))),
+        keyPasses:      Math.max(1, Math.round((r * (pos === "MF" ? 0.9 : pos === "FW" ? 0.55 : 0.2) + rnd(15) * 3) * (a / 28))),
+      },
+      attacking: {
+        totalShots:     Math.max(1, totalShots),
+        xG:             +(r * (pos === "FW" ? 0.36 : pos === "MF" ? 0.13 : 0.04) * (a / 28) + rnd(18) * 1.5).toFixed(1),
+        goals:          pos === "FW" ? Math.max(0, Math.round(r * 0.68 * (a / 28) + rnd(19) * 2)) : Math.max(0, Math.round(r * 0.12 * (a / 28) + rnd(19) * 1)),
+        shotsOnTarget:  shotsOT,
+        shotsOffTarget: Math.max(0, totalShots - shotsOT),
+        touchesOppBox:  Math.max(1, Math.round((r * (pos === "FW" ? 2.8 : pos === "MF" ? 0.9 : 0.2) + rnd(20) * 5) * (a / 28))),
+        successfulDribbles: Math.max(0, Math.round((r * (pos === "FW" ? 1.3 : pos === "MF" ? 0.7 : 0.2) + rnd(21) * 3) * (a / 28))),
+        foulsSuffered:  Math.max(1, Math.round((r * (pos === "FW" ? 1.1 : 0.6) + rnd(22) * 3) * (a / 28))),
+        offsides:       pos === "FW" ? Math.max(0, Math.round(1 + rnd(23) * 7)) : Math.max(0, Math.round(rnd(23) * 2)),
+      },
+    };
+  }
+
+  // ---- API Stats generator (SportsMonks field mapping) ----
+  function apiStats(pos, rating, apps, seed, goals, assists) {
+    const s = seed || 1;
+    const rnd = (n) => Math.abs((Math.sin(s * 83 + n * 277) % 1));
+    const r = rating, a = Math.max(1, apps);
+    const isGK = pos === "GK", isDF = pos === "DF", isMF = pos === "MF", isFW = pos === "FW";
+
+    const shotsTotal     = isGK ? 0
+      : isFW ? Math.round((r * 2.1 + rnd(1) * 6)    * (a / 28))
+      : isMF ? Math.round((r * 0.8 + rnd(1) * 3)    * (a / 28))
+      :        Math.round((r * 0.22 + rnd(1) * 2)   * (a / 28));
+    const shotsOnTarget  = Math.max(0, Math.round(shotsTotal * (0.38 + rnd(2) * 0.18)));
+    const shotsOffTarget = Math.max(0, shotsTotal - shotsOnTarget);
+
+    const accuratePasses = Math.round((r * 5.2 + rnd(3) * 20 + 40) * (a / 28));
+    const passes         = Math.round(accuratePasses * (1.08 + rnd(4) * 0.1));
+    const passAcc        = +(accuratePasses / passes * 100).toFixed(1);
+
+    const duelsWon   = Math.max(5, Math.round((r * 3.1 + rnd(5) * 5)  * (a / 28)));
+    const totalDuels = Math.max(duelsWon + 5, Math.round(duelsWon * (1.4 + rnd(6) * 0.4)));
+
+    const saves        = isGK ? Math.max(20, Math.round((r * 3.4 + rnd(7) * 10) * (a / 28))) : 0;
+    const savesInsideBox = isGK ? Math.max(0, Math.round(saves * (0.55 + rnd(8) * 0.2))) : 0;
+
+    const tackles = isDF ? Math.max(8, Math.round((r * 2.0 + rnd(9) * 8) * (a / 28)))
+      : isMF      ? Math.max(4, Math.round((r * 1.1 + rnd(9) * 4) * (a / 28)))
+      :             Math.max(1, Math.round((r * 0.5 + rnd(9) * 2) * (a / 28)));
+
+    const clearances = isDF ? Math.max(10, Math.round((r * 3.2 + rnd(10) * 12) * (a / 28)))
+      : isGK         ? Math.max(2,  Math.round(rnd(10) * 5 * (a / 28)))
+      :                Math.max(0,  Math.round((r * 0.2 + rnd(10) * 2) * (a / 28)));
+
+    const interceptions = isDF ? Math.max(6, Math.round((r * 1.7 + rnd(11) * 6) * (a / 28)))
+      : isMF             ? Math.max(3, Math.round((r * 1.0 + rnd(11) * 3) * (a / 28)))
+      :                    Math.max(1, Math.round((r * 0.4 + rnd(11) * 2) * (a / 28)));
+
+    const aerialsWon = (isDF || isGK) ? Math.max(8, Math.round((r * 2.1 + rnd(12) * 8) * (a / 28)))
+      :                                 Math.max(2, Math.round((r * 0.7 + rnd(12) * 3) * (a / 28)));
+
+    const keyPasses = isMF ? Math.max(5, Math.round((r * 0.9 + rnd(13) * 6) * (a / 28)))
+      : isFW         ? Math.max(2, Math.round((r * 0.55 + rnd(13) * 3) * (a / 28)))
+      :                Math.max(1, Math.round((r * 0.2 + rnd(13) * 2) * (a / 28)));
+
+    const bench   = Math.max(0, Math.round(2 + rnd(14) * 8));
+    const lineups = Math.max(0, a - bench);
+    const minutesPlayed = Math.round((lineups * (65 + rnd(40) * 25)) + (bench * (10 + rnd(41) * 25)));
+    const cumulativeMinutesPlayed = minutesPlayed + Math.round(rnd(42) * 250);
+
+    const goalsConceded = isGK ? Math.max(8, Math.round((10.5 - r) * 1.5 * (a / 28) + rnd(15) * 5))
+      :                          Math.max(0, Math.round(rnd(15) * 3));
+
+    const fouls      = Math.max(2, Math.round((r * 0.4 + rnd(16) * 0.5 + 3) * (a / 28)));
+    const foulsDrawn = Math.max(1, Math.round((isFW ? r * 1.1 : r * 0.6) * (a / 28) + rnd(17) * 3));
+
+    const totalCrosses    = (isFW || isMF) ? Math.max(5, Math.round((r * 1.2 + rnd(18) * 5) * (a / 28)))
+      :                                      Math.max(1, Math.round((r * 0.3 + rnd(18) * 2) * (a / 28)));
+    const accurateCrosses = Math.max(0, Math.round(totalCrosses * (0.3 + rnd(19) * 0.25)));
+
+    const longBalls    = Math.max(5, Math.round((r * 1.5 + rnd(20) * 6) * (a / 28)));
+    const longBallsWon = Math.max(1, Math.round(longBalls * (0.35 + rnd(21) * 0.25)));
+
+    const throughBalls    = isMF ? Math.max(2, Math.round((r * 0.4 + rnd(22) * 4) * (a / 28)))
+      :                            Math.max(0, Math.round(rnd(22) * 3 * (a / 28)));
+    const throughBallsWon = Math.max(0, Math.round(throughBalls * (0.5 + rnd(23) * 0.3)));
+
+    const bigChancesCreated = isMF ? Math.max(2, Math.round((r * 0.3 + rnd(24) * 3) * (a / 28)))
+      : isFW                  ? Math.max(1, Math.round((r * 0.2 + rnd(24) * 2) * (a / 28)))
+      :                         Math.max(0, Math.round(rnd(24) * 2 * (a / 28)));
+    const bigChancesMissed  = isFW ? Math.max(1, Math.round((r * 0.25 + rnd(25) * 3) * (a / 28)))
+      :                               Math.max(0, Math.round(rnd(25) * 2 * (a / 28)));
+
+    const offsides     = isFW ? Math.max(0, Math.round(1 + rnd(26) * 7)) : Math.max(0, Math.round(rnd(26) * 2));
+    const dispossessed = isFW ? Math.max(3, Math.round((r * 0.6 + rnd(27) * 5) * (a / 28)))
+      :                          Math.max(1, Math.round((r * 0.3 + rnd(27) * 3) * (a / 28)));
+    const dribbledPast = isDF ? Math.max(2, Math.round((r * 0.4 + rnd(28) * 4) * (a / 28)))
+      :                          Math.max(1, Math.round((r * 0.2 + rnd(28) * 2) * (a / 28)));
+    const blocks       = isDF ? Math.max(3, Math.round((r * 0.75 + rnd(29) * 3) * (a / 28)))
+      :                          Math.max(0, Math.round(rnd(29) * 2 * (a / 28)));
+
+    const errorLeadToGoal = Math.max(0, Math.round(rnd(30) * 2.5));
+    const yellowcards     = Math.max(0, Math.round(rnd(31) * 7));
+    const yellowredCards  = yellowcards > 5 ? Math.max(0, Math.round(rnd(32) * 1.5)) : 0;
+    const redcards        = Math.max(0, Math.round(rnd(33) * 1.5));
+    const substitutions   = Math.max(1, Math.round(2 + rnd(34) * 12));
+    const captain         = Math.round(rnd(35) * 5);
+    const hitWoodwork     = isFW ? Math.max(0, Math.round(rnd(36) * 4)) : Math.max(0, Math.round(rnd(36) * 2));
+    const ownGoals        = Math.max(0, Math.round(rnd(37) * 1.5));
+    const hattricks       = isFW ? Math.max(0, Math.round(rnd(38) * 1.5)) : 0;
+    const crossesBlocked  = Math.max(0, Math.round((r * 0.3 + rnd(39) * 2) * (a / 28)));
+
+    return {
+      general: {
+        appearances: a, bench, lineups,
+        minutesPlayed, cumulativeMinutesPlayed,
+        ownGoals, crossesBlocked, hattricks,
+      },
+      offensive: {
+        goals: goals || 0, assists: assists || 0,
+        shotsTotal, shotsOnTarget, shotsOffTarget,
+        accuratePassesPercentage: passAcc,
+        bigChancesCreated, bigChancesMissed,
+        duelsWon, totalDuels,
+        dispossessed, hitWoodwork, offsides,
+      },
+      defensive: {
+        goalsConceded, blocks, clearances,
+        errorLeadToGoal, fouls, interceptions,
+        saves, savesInsideBox, tackles,
+      },
+      overall: {
+        captain, redcards, substitutions,
+        yellowcards, yellowredCards,
+        accurateCrosses, accuratePasses,
+        aerialsWon, dribbledPast, foulsDrawn,
+        keyPasses, longBalls, longBallsWon,
+        passes, rating: r,
+        successfulPasses: accuratePasses,
+        successfulPassesPercentage: passAcc,
+        throughBalls, throughBallsWon, totalCrosses,
+      },
+    };
+  }
+
+  // ---- Pitch heat map zones (18 = 6 rows × 3 cols, own goal → opp goal) ----
+  function heatZones(pos, seed) {
+    const s = seed || 1;
+    const rnd = (n) => Math.abs((Math.sin(s * 43 + n * 193) % 1));
+    const rowBase = {
+      GK: [92, 18, 8,  4,  3,  2],
+      DF: [28, 72, 58, 22, 9,  4],
+      MF: [8,  28, 68, 72, 32, 12],
+      FW: [4,  5,  14, 42, 72, 84],
+    }[pos] || [25, 35, 45, 45, 35, 25];
+    return Array.from({ length: 18 }, (_, i) => {
+      const row = Math.floor(i / 3), col = i % 3;
+      const colMod = col === 1 ? 1.18 : 0.88;
+      return Math.min(99, Math.max(3, Math.round(rowBase[row] * colMod + rnd(i) * 15 - 3)));
+    });
+  }
+
+  // ---- Development goals (editable by scouts/owners) ----
+  function devGoals(pos, seed) {
+    const rnd = (n) => Math.abs((Math.sin((seed || 1) * 61 + n * 137) % 1));
+    const prog = (base) => Math.min(90, Math.max(15, Math.round(base + rnd(base) * 22)));
+    const sets = {
+      FW: [
+        { title: "Weak-foot finishing",         progress: prog(65), tone: "green" },
+        { title: "Movement in behind",           progress: prog(50), tone: "" },
+        { title: "Pressing high up the pitch",   progress: prog(40), tone: "gold" },
+      ],
+      MF: [
+        { title: "Progressive passing accuracy", progress: prog(60), tone: "green" },
+        { title: "Transition pressing",          progress: prog(45), tone: "" },
+        { title: "Final-3rd chance creation",    progress: prog(55), tone: "gold" },
+      ],
+      DF: [
+        { title: "Aerial duel success rate",     progress: prog(55), tone: "green" },
+        { title: "Build-up play from back",      progress: prog(50), tone: "" },
+        { title: "Recovery positioning",         progress: prog(40), tone: "gold" },
+      ],
+      GK: [
+        { title: "Distribution accuracy",        progress: prog(60), tone: "green" },
+        { title: "Sweeper keeper range",         progress: prog(45), tone: "" },
+        { title: "Command of the box",           progress: prog(50), tone: "gold" },
+      ],
+    };
+    return (sets[pos] || sets.MF).map(g => ({ ...g }));
+  }
+
   // ---- Match history generator ----
   const OPP = [
     "FC Ribeira","Olympia SV","Coastal FC","Meridian City","Falcão SC",
@@ -145,7 +358,11 @@
       ratings: series(8, o.rating, 0.7, 0.04),
       league: leagueName,
       positionStats: posStats(o.pos, o.rating, o.apps, id),
-      matchHistory: matchHistory(o, id),
+      extStats:      extStats(o.pos, o.rating, o.apps, id),
+      apiStats:      apiStats(o.pos, o.rating, o.apps, id, o.goals, o.assists),
+      heatZones:     heatZones(o.pos, id),
+      devGoals:      devGoals(o.pos, id),
+      matchHistory:  matchHistory(o, id),
     }, o);
   }
 

@@ -37,6 +37,107 @@ function posMetricItems(p) {
   return [];
 }
 
+// =================== API STATS SECTION (4 tabs) ===================
+function ApiStatsSection({ apiStats: api }) {
+  const [tab, setTab] = useStateD("general");
+
+  const TABS = [
+    { key: "general",   label: "General",   color: "var(--accent)" },
+    { key: "offensive", label: "Offensive", color: "var(--gold)"   },
+    { key: "defensive", label: "Defensive", color: "var(--text)"   },
+    { key: "overall",   label: "Overall",   color: "var(--green)"  },
+  ];
+
+  const genItems = [
+    { label: "Appearances",         value: api.general.appearances },
+    { label: "Lineups",             value: api.general.lineups },
+    { label: "Bench",               value: api.general.bench },
+    { label: "Minutes Played",      value: api.general.minutesPlayed },
+    { label: "Cumulative Mins",     value: api.general.cumulativeMinutesPlayed },
+    { label: "Own Goals",           value: api.general.ownGoals },
+    { label: "Crosses Blocked",     value: api.general.crossesBlocked },
+    { label: "Hattricks",           value: api.general.hattricks },
+  ];
+  const offItems = [
+    { label: "Goals",               value: api.offensive.goals },
+    { label: "Assists",             value: api.offensive.assists },
+    { label: "Shots Total",         value: api.offensive.shotsTotal },
+    { label: "Shots on Target",     value: api.offensive.shotsOnTarget },
+    { label: "Shots off Target",    value: api.offensive.shotsOffTarget },
+    { label: "Big Chances Created", value: api.offensive.bigChancesCreated },
+    { label: "Big Chances Missed",  value: api.offensive.bigChancesMissed },
+    { label: "Duels Won",           value: api.offensive.duelsWon },
+    { label: "Total Duels",         value: api.offensive.totalDuels },
+    { label: "Pass Acc. %",         value: api.offensive.accuratePassesPercentage + "%" },
+    { label: "Dispossessed",        value: api.offensive.dispossessed },
+    { label: "Hit Woodwork",        value: api.offensive.hitWoodwork },
+    { label: "Offsides",            value: api.offensive.offsides },
+  ];
+  const defItems = [
+    { label: "Tackles",             value: api.defensive.tackles },
+    { label: "Interceptions",       value: api.defensive.interceptions },
+    { label: "Clearances",          value: api.defensive.clearances },
+    { label: "Blocks",              value: api.defensive.blocks },
+    { label: "Saves",               value: api.defensive.saves },
+    { label: "Saves Inside Box",    value: api.defensive.savesInsideBox },
+    { label: "Fouls",               value: api.defensive.fouls },
+    { label: "Goals Conceded",      value: api.defensive.goalsConceded },
+    { label: "Error Lead to Goal",  value: api.defensive.errorLeadToGoal },
+  ];
+  const ovItems = [
+    { label: "Rating",              value: api.overall.rating.toFixed(1) },
+    { label: "Passes",              value: api.overall.passes },
+    { label: "Accurate Passes",     value: api.overall.accuratePasses },
+    { label: "Successful Passes",   value: api.overall.successfulPasses },
+    { label: "Pass Acc. %",         value: api.overall.successfulPassesPercentage + "%" },
+    { label: "Key Passes",          value: api.overall.keyPasses },
+    { label: "Long Balls",          value: api.overall.longBalls },
+    { label: "Long Balls Won",      value: api.overall.longBallsWon },
+    { label: "Through Balls",       value: api.overall.throughBalls },
+    { label: "Through Balls Won",   value: api.overall.throughBallsWon },
+    { label: "Total Crosses",       value: api.overall.totalCrosses },
+    { label: "Accurate Crosses",    value: api.overall.accurateCrosses },
+    { label: "Aerials Won",         value: api.overall.aerialsWon },
+    { label: "Dribbled Past",       value: api.overall.dribbledPast },
+    { label: "Fouls Drawn",         value: api.overall.foulsDrawn },
+    { label: "Substitutions",       value: api.overall.substitutions },
+    { label: "Yellow Cards",        value: api.overall.yellowcards },
+    { label: "Yellow-Red Cards",    value: api.overall.yellowredCards },
+    { label: "Red Cards",           value: api.overall.redcards },
+    { label: "Captain",             value: api.overall.captain },
+  ];
+
+  const items = { general: genItems, offensive: offItems, defensive: defItems, overall: ovItems }[tab];
+  const color = (TABS.find(t => t.key === tab) || TABS[0]).color;
+
+  return (
+    <div className="card" style={{ marginBottom: 18 }}>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px 0", flexWrap: "wrap", gap: 8 }}>
+        <div>
+          <div style={{ fontWeight: 700, fontSize: 15 }}>Season Statistics</div>
+          <div style={{ fontSize: 11, color: "var(--text-3)", fontFamily: "var(--font-mono)", marginTop: 2 }}>SportsMonks field format · mock data</div>
+        </div>
+        <div style={{ display: "flex", gap: 6 }}>
+          {TABS.map(t => (
+            <button key={t.key} className={"chip-toggle" + (tab === t.key ? " on" : "")}
+              onClick={() => setTab(t.key)}>
+              {t.label}
+            </button>
+          ))}
+        </div>
+      </div>
+      <div style={{ display: "grid", gridTemplateColumns: "repeat(3,1fr)", gap: 12, padding: 20 }}>
+        {items.map((m, i) => (
+          <div key={i} className="card" style={{ padding: "14px 16px", background: "var(--surface-2)", textAlign: "center" }}>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: ".1em", textTransform: "uppercase", color: "var(--text-3)", marginBottom: 8 }}>{m.label}</div>
+            <div className="display" style={{ fontSize: 26, color }}>{m.value}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 // =================== PLAYER DIRECTORY ===================
 function PlayerDirectory({ onOpenPlayer }) {
   const P = window.DD.PLAYERS;
@@ -377,6 +478,9 @@ function PlayerProfile({ player, onBack }) {
               ))}
             </div>
           </SectionCard>
+
+          {/* Extended stats — Defending / Possession / Attacking */}
+          {p.apiStats && <ApiStatsSection apiStats={p.apiStats} />}
 
           {/* G+A by month + last 8 match ratings */}
           <div className="dash-grid">

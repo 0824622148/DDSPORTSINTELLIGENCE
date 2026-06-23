@@ -165,7 +165,7 @@ function App() {
       case "roster":        return <S.ManagedRoster onOpenPlayer={openPlayer} />;
       case "pipeline":      return <S.RecruitmentPipeline />;
       case "scoutdash":     return <S.ScoutDashboard onOpenPlayer={openPlayer} />;
-      case "playerdash":    return <S.PlayerDashboard player={window.DD.PLAYERS[0]} />;
+      case "playerdash":    return <S.PlayerDashboard player={window.DD.PLAYERS[0]} role={role} />;
       case "documents":     return <S.Documents />;
       case "notifications": return <S.Notifications />;
       case "benchmarks":    return SA ? <SA.BenchmarkingEngine /> : <div className="empty">Analytics module not loaded.</div>;

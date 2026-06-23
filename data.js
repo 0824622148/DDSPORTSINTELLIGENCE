@@ -507,6 +507,9 @@
     {name:"Anton Skov",     pos:"FW", club:"Nordvik IF", mv:"€9.5M",  scout:8.3, stage:"signed",      nation:"Norway",   age:18},
     {name:"Reuben Falk",    pos:"DF", club:"Highmoor B", mv:"€4.0M",  scout:6.4, stage:"rejected",    nation:"Germany",  age:23},
   ];
+  TARGETS.forEach(function(t, i) {
+    t.apiStats = apiStats(t.pos, t.scout, Math.round(t.scout * 2.5), i * 31 + 100, 0, 0);
+  });
 
   const STAGES = [
     {id:"identified",  label:"Identified",        color:"#8590ad"},

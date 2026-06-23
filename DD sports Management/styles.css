@@ -505,3 +505,9 @@ h1,h2,h3,h4{font-family:var(--font-display);font-weight:700;letter-spacing:-0.02
   .topbar .crumb .crumb-path{display:none}
   .panel{width:calc(100vw - 32px);right:-8px}
 }
+@media print{
+  .sidebar,.topbar,.mobile-overlay{display:none!important}
+  .main{margin-left:0!important}
+  .content{padding:0!important;overflow:visible!important}
+  .no-print{display:none!important}
+}

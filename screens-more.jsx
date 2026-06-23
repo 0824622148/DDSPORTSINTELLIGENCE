@@ -214,7 +214,7 @@ function priorityBand(score10) {
   return                   { label: "Low Impact",  tone: "red",   color: "var(--red)"   };
 }
 
-function ScoutDashboard({ onOpenPlayer }) {
+function ScoutDashboard({ onOpenPlayer, onScoutReport }) {
   const targets = window.DD.TARGETS;
   const [sel, setSel] = useStateM(0);
   const [ratings, setRatings] = useStateM(() =>
@@ -250,7 +250,7 @@ function ScoutDashboard({ onOpenPlayer }) {
           <h1>Scout Workspace</h1>
           <div className="sub">South America region · 14 players tracked</div>
         </div>
-        <button className="btn btn-primary"><Icon name="plus" size={16} />New Scout Report</button>
+        <button className="btn btn-primary" onClick={() => onScoutReport && onScoutReport(evalP)}><Icon name="plus" size={16} />New Scout Report</button>
       </div>
 
       <div className="grid cols-4" style={{ marginBottom: 18 }}>
@@ -779,5 +779,252 @@ function ManagedRoster({ onOpenPlayer }) {
   );
 }
 
+// =================== SCOUTING REPORT ===================
+const PERF_LABELS = ["","Awful","Very Poor","Poor","Below Average","Average","Above Average","Good","Very Good","Excellent","Outstanding"];
+const POT_LABELS  = ["","Conference N/S","League One / Two","League One","Championship / L1","Lower PL / Championship","Mid-table PL","Established PL (top half)","Top 4 (big league)","Champions League side","Elite CL side"];
+
+const POS_ATTRS = {
+  GK: {
+    Technical: ["Shot Stopping","Handling & Distribution","Command of Box","1v1 Saves"],
+    Mental:    ["Recovery Position","Bravery","Leadership & Communication","Concentration"],
+    Tactical:  ["Anticipation & Positioning","Decision Making","Instructing Defenders"],
+    Physical:  ["Agility & Reflexes","Strength Under Pressure"],
+  },
+  DF: {
+    Technical: ["Passing & Distribution","Tackling","Marking","Aerial Ability"],
+    Mental:    ["Bravery & Aggression","Leadership","Concentration","Determination"],
+    Tactical:  ["Positioning","Decision Making","1v1 Defending","Anticipation","Reading the Game"],
+    Physical:  ["Strength & Size","Agility & Recovery"],
+  },
+  MF: {
+    Technical: ["First Touch & Passing","Ball Retention","Vision & Through Balls","Goal Threat","Aerial Duels"],
+    Mental:    ["Work Rate","Leadership & Drive","Bravery"],
+    Tactical:  ["Decision Making","Off the Ball Movement","Pressing & Tracking Back","Reading the Game"],
+    Physical:  ["Stamina & Endurance","Agility & Pace"],
+  },
+  FW: {
+    Technical: ["1v1 Attacking","Finishing & Goal Threat","Hold Up Play","Chance Creation"],
+    Mental:    ["Work Rate","Composure","Bravery"],
+    Tactical:  ["Off the Ball Runs","Decision Making","Tracking Back","Reading the Game"],
+    Physical:  ["Pace & Explosiveness","Strength & Power"],
+  },
+};
+
+const ATTR_RATINGS = [
+  { val: "++", label: "++", color: "var(--green)" },
+  { val: "+",  label: "+",  color: "#5fc97a" },
+  { val: "~",  label: "~",  color: "var(--gold)" },
+  { val: "-",  label: "-",  color: "#e07a30" },
+  { val: "--", label: "--", color: "var(--red)" },
+];
+
+const RECOMMENDATIONS = [
+  { val: "sign",    label: "Sign ASAP",          color: "var(--green)" },
+  { val: "watch",   label: "Watch Again",         color: "var(--accent)" },
+  { val: "monitor", label: "Monitor Season",      color: "var(--gold)" },
+  { val: "pass",    label: "Do Not Pursue",       color: "var(--red)" },
+];
+
+function GradeRow({ value, onChange, labels }) {
+  return (
+    <div>
+      <div style={{ display: "flex", gap: 6, flexWrap: "wrap", marginBottom: 10 }}>
+        {[1,2,3,4,5,6,7,8,9,10].map(n => {
+          const sel = value === n;
+          const col = n <= 3 ? "var(--red)" : n <= 5 ? "var(--gold)" : n <= 7 ? "var(--accent)" : "var(--green)";
+          return (
+            <button key={n} onClick={() => onChange(n)}
+              style={{ width: 40, height: 40, borderRadius: 10, fontWeight: 700, fontSize: 15, cursor: "pointer", border: sel ? "2px solid " + col : "1px solid var(--line-strong)",
+                background: sel ? `color-mix(in srgb,${col} 20%,var(--surface-2))` : "var(--surface-2)", color: sel ? col : "var(--text-3)", transition: "all .12s" }}>
+              {n}
+            </button>
+          );
+        })}
+      </div>
+      {value > 0 && (
+        <div style={{ fontSize: 13, fontWeight: 600, color: value <= 3 ? "var(--red)" : value <= 5 ? "var(--gold)" : value <= 7 ? "var(--accent)" : "var(--green)" }}>
+          {labels[value]}
+        </div>
+      )}
+    </div>
+  );
+}
+
+function ScoutingReport({ player, onBack }) {
+  const posAttrs = POS_ATTRS[player.pos] || POS_ATTRS.FW;
+  const attrGroups = Object.keys(posAttrs);
+
+  const [perfGrade,      setPerfGrade]      = useStateM(0);
+  const [potGrade,       setPotGrade]       = useStateM(0);
+  const [attrTab,        setAttrTab]        = useStateM(attrGroups[0]);
+  const [attrs,          setAttrs]          = useStateM({});
+  const [recommendation, setRecommendation] = useStateM("");
+  const [notes,          setNotes]          = useStateM("");
+
+  const setAttr = (group, name, val) => {
+    const key = group + ":" + name;
+    setAttrs(prev => ({ ...prev, [key]: prev[key] === val ? null : val }));
+  };
+
+  const ratedCount = Object.values(attrs).filter(Boolean).length;
+  const totalAttrs = Object.values(posAttrs).reduce((s, arr) => s + arr.length, 0);
+
+  return (
+    <div className="fade-in">
+      {/* ---- Header ---- */}
+      <div className="page-head no-print">
+        <div>
+          <div className="eyebrow">Scouting · Football Scouting Worldwide framework</div>
+          <h1>Scout Report</h1>
+          <div className="sub">{player.name} · {player.pos} · {player.club}</div>
+        </div>
+        <div style={{ display: "flex", gap: 8 }}>
+          <button className="btn btn-ghost" onClick={onBack}><Icon name="chevron-left" size={15} />Back</button>
+          <button className="btn btn-primary" onClick={() => window.print()}><Icon name="download" size={15} />Export PDF</button>
+        </div>
+      </div>
+
+      {/* ---- Player Bio ---- */}
+      <div className="card" style={{ marginBottom: 18, padding: "20px 24px" }}>
+        <div style={{ display: "flex", alignItems: "center", gap: 18, flexWrap: "wrap" }}>
+          <Avatar name={player.name} color={player.avColor || "#1f3aa6"} size={64} ring />
+          <div style={{ flex: 1 }}>
+            <div style={{ display: "flex", alignItems: "center", gap: 10, flexWrap: "wrap", marginBottom: 6 }}>
+              <span style={{ fontWeight: 700, fontSize: 20 }}>{player.name}</span>
+              <PosTag pos={player.pos} />
+              {player.flag && <span style={{ fontSize: 16 }}>{player.flag}</span>}
+            </div>
+            <div className="dim" style={{ fontSize: 13, display: "flex", gap: 18, flexWrap: "wrap" }}>
+              <span><b>Club:</b> {player.club}</span>
+              {player.age   && <span><b>Age:</b> {player.age}</span>}
+              {player.nation && <span><b>Nation:</b> {player.nation}</span>}
+              {player.mv    && <span><b>MV:</b> {player.mv}</span>}
+              {player.scout && <span><b>Scout Score:</b> <b style={{ color: "var(--accent)" }}>{player.scout}</b></span>}
+            </div>
+          </div>
+          <div style={{ textAlign: "right" }}>
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: 10, letterSpacing: ".1em", color: "var(--text-3)", marginBottom: 4 }}>REPORT DATE</div>
+            <div style={{ fontWeight: 600, fontSize: 14 }}>{new Date().toLocaleDateString("en-GB", { day:"2-digit", month:"short", year:"numeric" })}</div>
+            <div className="dim" style={{ fontSize: 11, marginTop: 4 }}>Scout: Marco Solano</div>
+          </div>
+        </div>
+      </div>
+
+      {/* ---- Foundation: API Stats ---- */}
+      {player.apiStats
+        ? <ApiStatsSection apiStats={player.apiStats} />
+        : (
+          <div className="card" style={{ marginBottom: 18, padding: "20px 24px", textAlign: "center", color: "var(--text-3)" }}>
+            <Icon name="activity" size={24} style={{ marginBottom: 8 }} />
+            <div style={{ fontFamily: "var(--font-mono)", fontSize: 12 }}>No season stats available for this player yet.</div>
+          </div>
+        )
+      }
+
+      {/* ---- Performance Grade ---- */}
+      <div className="card" style={{ marginBottom: 18, padding: "20px 24px" }}>
+        <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 4 }}>Performance Grade</div>
+        <div style={{ fontSize: 11, color: "var(--text-3)", fontFamily: "var(--font-mono)", marginBottom: 16 }}>
+          How did the player perform in the observed match(es)?
+        </div>
+        <GradeRow value={perfGrade} onChange={setPerfGrade} labels={PERF_LABELS} />
+      </div>
+
+      {/* ---- Potential Grade ---- */}
+      <div className="card" style={{ marginBottom: 18, padding: "20px 24px" }}>
+        <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 4 }}>Player Potential Grade</div>
+        <div style={{ fontSize: 11, color: "var(--text-3)", fontFamily: "var(--font-mono)", marginBottom: 16 }}>
+          What level could this player realistically reach?
+        </div>
+        <GradeRow value={potGrade} onChange={setPotGrade} labels={POT_LABELS} />
+      </div>
+
+      {/* ---- Attribute Assessment ---- */}
+      <div className="card" style={{ marginBottom: 18 }}>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px 0", flexWrap: "wrap", gap: 8 }}>
+          <div>
+            <div style={{ fontWeight: 700, fontSize: 15 }}>Attribute Assessment</div>
+            <div style={{ fontSize: 11, color: "var(--text-3)", fontFamily: "var(--font-mono)", marginTop: 2 }}>
+              {player.pos} position framework · {ratedCount}/{totalAttrs} rated
+            </div>
+          </div>
+          <div style={{ display: "flex", gap: 6, flexWrap: "wrap" }}>
+            {attrGroups.map(g => (
+              <button key={g} className={"chip-toggle" + (attrTab === g ? " on" : "")} onClick={() => setAttrTab(g)}>{g}</button>
+            ))}
+          </div>
+        </div>
+        <div style={{ padding: "16px 20px 20px", display: "flex", flexDirection: "column", gap: 10 }}>
+          {(posAttrs[attrTab] || []).map(name => {
+            const key = attrTab + ":" + name;
+            const cur = attrs[key] || null;
+            return (
+              <div key={name} style={{ display: "flex", alignItems: "center", gap: 12, padding: "12px 14px", borderRadius: 10, background: "var(--surface-2)" }}>
+                <div style={{ flex: 1, fontSize: 13.5, fontWeight: 500 }}>{name}</div>
+                <div style={{ display: "flex", gap: 6 }}>
+                  {ATTR_RATINGS.map(r => {
+                    const active = cur === r.val;
+                    return (
+                      <button key={r.val} onClick={() => setAttr(attrTab, name, r.val)}
+                        style={{ width: 38, height: 34, borderRadius: 8, fontWeight: 700, fontSize: 13, cursor: "pointer",
+                          border: active ? "2px solid " + r.color : "1px solid var(--line-strong)",
+                          background: active ? `color-mix(in srgb,${r.color} 22%,var(--surface))` : "var(--surface)",
+                          color: active ? r.color : "var(--text-3)", transition: "all .1s" }}>
+                        {r.val}
+                      </button>
+                    );
+                  })}
+                </div>
+              </div>
+            );
+          })}
+        </div>
+        {/* Rating legend */}
+        <div style={{ padding: "0 20px 16px", display: "flex", gap: 14, flexWrap: "wrap" }}>
+          {[["++ Excellent","var(--green)"],["+  Good","#5fc97a"],["~  Average","var(--gold)"],["−  Below Avg","#e07a30"],["−− Poor","var(--red)"]].map(([lbl, col]) => (
+            <div key={lbl} style={{ display: "flex", alignItems: "center", gap: 5, fontSize: 11, color: "var(--text-3)", fontFamily: "var(--font-mono)" }}>
+              <span style={{ color: col, fontWeight: 700 }}>{lbl.slice(0,2)}</span>{lbl.slice(2)}
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* ---- Recommendation ---- */}
+      <div className="card" style={{ marginBottom: 18, padding: "20px 24px" }}>
+        <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 14 }}>Recommendation</div>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(2,1fr)", gap: 10 }}>
+          {RECOMMENDATIONS.map(r => {
+            const sel = recommendation === r.val;
+            return (
+              <button key={r.val} onClick={() => setRecommendation(sel ? "" : r.val)}
+                style={{ padding: "14px 16px", borderRadius: 12, fontWeight: 700, fontSize: 14, cursor: "pointer", textAlign: "center",
+                  border: sel ? "2px solid " + r.color : "1px solid var(--line-strong)",
+                  background: sel ? `color-mix(in srgb,${r.color} 15%,var(--surface-2))` : "var(--surface-2)",
+                  color: sel ? r.color : "var(--text-2)", transition: "all .12s" }}>
+                {r.label}
+              </button>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* ---- Observations ---- */}
+      <div className="card" style={{ marginBottom: 18, padding: "20px 24px" }}>
+        <div style={{ fontWeight: 700, fontSize: 15, marginBottom: 14 }}>Scout Observations</div>
+        <textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="Additional notes on the player's character, playing style, attitude, key strengths or concerns…"
+          rows={5} style={{ width: "100%", background: "var(--surface-2)", border: "1px solid var(--line-strong)", borderRadius: 10,
+            padding: "12px 14px", color: "var(--text)", fontSize: 13.5, lineHeight: 1.6, resize: "vertical", boxSizing: "border-box",
+            fontFamily: "inherit" }} />
+      </div>
+
+      {/* ---- Print action footer ---- */}
+      <div className="no-print" style={{ display: "flex", justifyContent: "flex-end", gap: 10, paddingBottom: 40 }}>
+        <button className="btn btn-ghost" onClick={onBack}><Icon name="chevron-left" size={15} />Back to Scout Workspace</button>
+        <button className="btn btn-primary" onClick={() => window.print()}><Icon name="download" size={15} />Export PDF</button>
+      </div>
+    </div>
+  );
+}
+
 window.Screens = window.Screens || {};
-Object.assign(window.Screens, { ScoutDashboard, RecruitmentPipeline, PlayerDashboard, Documents, Notifications, ManagedRoster });
+Object.assign(window.Screens, { ScoutDashboard, RecruitmentPipeline, PlayerDashboard, Documents, Notifications, ManagedRoster, ScoutingReport });

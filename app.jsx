@@ -88,6 +88,7 @@ const CRUMB = {
   roster:        { section: "Operations",   page: "Managed Players"    },
   benchmarks:    { section: "Analytics",    page: "Benchmarking Engine"},
   compare:       { section: "Analytics",    page: "Player Comparison"  },
+  scoutreport:   { section: "Scouting",    page: "Scout Report"       },
 };
 
 function NotifPanel({ onClose }) {
@@ -128,6 +129,7 @@ function App() {
   const [navOpen,  setNavOpen]  = useStateA(false);
   const [bell,     setBell]     = useStateA(false);
   const [toast,    setToast]    = useStateA(null);
+  const [scoutReportTarget, setScoutReportTarget] = useStateA(null);
 
   useEffectA(() => { document.documentElement.setAttribute("data-theme", theme); }, [theme]);
   useEffectA(() => {
@@ -149,6 +151,7 @@ function App() {
   };
 
   const openPlayer = (id) => { setPlayerId(id); setScreen("profile"); };
+  const openScoutReport = (target) => { setScoutReportTarget(target); setScreen("scoutreport"); setNavOpen(false); };
   const goto = (s) => { setScreen(s); setNavOpen(false); };
 
   if (!authed) return <S.Login onLogin={login} />;
@@ -164,7 +167,8 @@ function App() {
       case "profile":       return <S.PlayerProfile player={player} onBack={() => goto(role === "player" ? "playerdash" : "directory")} />;
       case "roster":        return <S.ManagedRoster onOpenPlayer={openPlayer} />;
       case "pipeline":      return <S.RecruitmentPipeline />;
-      case "scoutdash":     return <S.ScoutDashboard onOpenPlayer={openPlayer} />;
+      case "scoutdash":     return <S.ScoutDashboard onOpenPlayer={openPlayer} onScoutReport={openScoutReport} />;
+      case "scoutreport":  return <S.ScoutingReport player={scoutReportTarget || window.DD.TARGETS[0]} onBack={() => goto("scoutdash")} />;
       case "playerdash":    return <S.PlayerDashboard player={window.DD.PLAYERS[0]} role={role} />;
       case "documents":     return <S.Documents />;
       case "notifications": return <S.Notifications />;
